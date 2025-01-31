@@ -13,7 +13,7 @@ interface ContentSection {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   type: string;
   description: string;
-  ref: React.RefObject<HTMLDivElement>;
+  ref: React.RefObject<HTMLDivElement | null>;  // Allow ref to be null as well
 }
 
 const SlidingWindowPage: React.FC = () => {
@@ -26,7 +26,7 @@ const SlidingWindowPage: React.FC = () => {
       icon: BookOpen,
       type: "Learn Theory",
       description: "Understanding the fundamental concepts and mechanics",
-      ref: useRef<HTMLDivElement | null>(null),
+      ref: useRef<HTMLDivElement | null>(null),  // Use null to allow the reference to be null
     },
     {
       title: "Implementation",
@@ -148,19 +148,30 @@ const SlidingWindowPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Selected Content Display */}
-          {selectedContent && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-              <Card className="bg-slate-900/50 border-slate-800 shadow-2xl backdrop-blur-sm">
-                <CardHeader className="border-b border-slate-800">
-                  <CardTitle className="text-2xl font-bold text-slate-200">
-                    {contentSections.find((s) => s.type === selectedContent)?.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-8 text-slate-300">{renderContent(selectedContent)}</CardContent>
-              </Card>
-            </motion.div>
-          )}
+          {/* Section Content Rendered Here */}
+          {contentSections.map((section, index) => (
+            <div
+              key={section.type}
+              ref={section.ref}  // Ensure each section has a ref
+              className="mt-8"
+            >
+              {/* Only render the content for the selected section */}
+              {selectedContent === section.type && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 * index }}
+                >
+                  <Card className="bg-slate-900/50 border-slate-800 shadow-2xl backdrop-blur-sm">
+                    <CardHeader className="border-b border-slate-800">
+                      <CardTitle className="text-2xl font-bold text-slate-200">{section.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-8 text-slate-300">{renderContent(section.type)}</CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>
