@@ -1,5 +1,7 @@
 
 import { SignIn } from "@clerk/nextjs";
+import Link from "next/link";
+
 
 export default function Page() {
   return (
@@ -25,9 +27,9 @@ export default function Page() {
         <div className="text-center mt-4">
           <p className="text-sm text-gray-500">
             Don&apos;t have an account?{" "}
-            <a href="/sign-up" className="text-blue-500 hover:underline">
+            <Link href="/sign-up" className="text-blue-500 hover:underline">
               Sign Up
-            </a>
+            </Link>
           </p>
         </div>
       </div>
