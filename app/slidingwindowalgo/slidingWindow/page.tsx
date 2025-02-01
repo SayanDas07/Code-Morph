@@ -90,7 +90,7 @@ const SlidingWindowPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent"
             >
-              Sliding Window Algorithm
+              Maximum sum subarray of size k
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -98,8 +98,7 @@ const SlidingWindowPage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="text-lg text-slate-300 leading-relaxed"
             >
-              The Sliding Window technique optimizes problems related to arrays and sequences by dynamically adjusting a window over elements.
-              It is widely used in problems involving subarrays, substrings, and real-time data processing.
+              The Sliding Window technique optimizes this problem by dynamically adjusting a window over elements.
             </motion.p>
           </div>
         </div>
