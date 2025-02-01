@@ -80,7 +80,7 @@ export const algorithms: Algorithm[] = [
                 name: "Maximum Consecutive Ones After Flipping K Zeros",
                 difficulty: "Medium",
                 description: "Check if one string's permutation is a substring of another",
-                Link: "/slidingwindowalgo/flipKzero"
+                Link: "/slidingwindowalgo/FlipKzero"
             },
         ]
     },
