@@ -35,7 +35,7 @@ export const algorithms: Algorithm[] = [
                 name: "Detect Cycle",
                 difficulty: "Medium",
                 description: "Detect if a linked list has a cycle",
-                leetcodeLink: "/haretortoisealgorithm/detectCycle"
+                Link: "/haretortoisealgorithm/detectCycle"
             },
         ]
     },
@@ -50,7 +50,14 @@ export const algorithms: Algorithm[] = [
                 name: "Two Sum Sorted",
                 difficulty: "Easy",
                 description: "Find two numbers that add up to target in sorted array",
-                leetcodeLink: "/twopointersalgorithm/twoSumSorted"
+                Link: "/twopointersalgorithm/twoSumSorted"
+            },
+            {
+                id: "tp2",
+                name: "Binary Search",
+                difficulty: "Medium",
+                description: "Find an element in a sorted array",
+                Link: "/twopointersalgorithm/twoSumSorted"
             },
 
         ]
@@ -58,12 +65,12 @@ export const algorithms: Algorithm[] = [
     {
         id: 3,
         name: "Sliding window technique",
-        description: "ergfergf",
+        description: "An efficient technique for solving problems involving subarrays or substrings by dynamically adjusting a window over consecutive elements",
         category: "Array",
         problems: [
             {
                 id: "sw1",
-                name: "Maximum sum of a subarray",
+                name: "Maximum Sum Subarray",
                 difficulty: "Medium",
                 description: "Find the maximum sum of a subarray of fixed size k",
                 Link: "/slidingwindowalgo/slidingWindow"
@@ -73,7 +80,7 @@ export const algorithms: Algorithm[] = [
                 name: "Maximum Consecutive Ones After Flipping K Zeros",
                 difficulty: "Medium",
                 description: "Check if one string's permutation is a substring of another",
-                leetcodeLink: "/slidingwindowalgo/flipKzero"
+                Link: "/slidingwindowalgo/flipKzero"
             },
         ]
     }
