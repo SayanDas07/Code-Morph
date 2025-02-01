@@ -83,5 +83,51 @@ export const algorithms: Algorithm[] = [
                 Link: "/slidingwindowalgo/flipKzero"
             },
         ]
+    },
+    {
+        id: 4,
+        name: "DFS traversals",
+        description: "Depth First Search is a graph traversal algorithm that explores as far as possible along each branch before backtracking",
+        category: "Tree, Graph",
+        problems: [
+            {
+                id: "dfs1",
+                name: "Binary Tree Inorder Traversal",
+                difficulty: "Easy",
+                description: "Inorder traversal of a binary tree",
+                Link: "/DFS/inorderBT"
+            },
+            {
+                id: "dfs2",
+                name: "Binary Tree Preorder Traversal",
+                difficulty: "Easy",
+                description: "Preorder traversal of a binary tree",
+                Link: "/DFS/preorderBT"
+            },
+            {
+                id: "dfs3",
+                name: "Binary Tree Postorder Traversal",
+                difficulty: "Easy",
+                description: "Postorder traversal of a binary tree",
+                Link: "/DFS/postorderBT"
+            },
+
+        ]
+    },
+    {
+        id: 5,
+        name: "BFS/Level Order Traversal",
+        description: "Breadth First Search is a graph traversal algorithm that explores the neighbor nodes at the present depth prior to moving on to the nodes at the next depth level",
+        category: "Tree, Graph",
+        problems: [
+            {
+                id: "bfs1",
+                name: "Binary Tree Level Order Traversal",
+                difficulty: "Medium",
+                description: "Level order traversal of a binary tree",
+                Link: "/BFS/levelorderBT"
+            },
+
+        ]
     }
 ];
