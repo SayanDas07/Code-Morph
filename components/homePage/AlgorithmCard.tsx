@@ -35,7 +35,11 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
     return (
         <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 
                     shadow-lg hover:shadow-blue-900/20 transition-all duration-300">
-            <div className="p-6 border-b border-gray-800">
+            {/* Make the entire header section clickable for expanding */}
+            <div
+                className="p-6 border-b border-gray-800 cursor-pointer hover:bg-gray-800/50 transition-all duration-200"
+                onClick={() => setIsExpanded(!isExpanded)}
+            >
                 <div className="flex items-start justify-between">
                     <div>
                         <h2 className="text-2xl font-bold text-gray-100 flex items-center gap-2">
@@ -52,15 +56,9 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                            bg-blue-900/30 text-blue-400 border border-blue-800">
                             {algorithm.problems.length} Problems
                         </span>
-                        <button
-                            onClick={() => setIsExpanded(!isExpanded)}
-                            className="p-2 hover:bg-gray-800/50 rounded-full transition-colors"
-                        >
-                            <ChevronRight
-                                className={`h-5 w-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''
-                                    }`}
-                            />
-                        </button>
+                        <ChevronRight
+                            className={`h-5 w-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
+                        />
                     </div>
                 </div>
                 <p className="mt-4 text-gray-400 leading-relaxed">{algorithm.description}</p>
