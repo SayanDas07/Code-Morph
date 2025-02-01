@@ -43,7 +43,7 @@ export default function WindowAnimation({ array, k }: Props) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPlaying, array, k, isFinished, windowSum]);
+  }, [isPlaying, array, k, isFinished, windowSum, windowStart]);
 
   const handlePlayPause = () => {
     if (isFinished) {
