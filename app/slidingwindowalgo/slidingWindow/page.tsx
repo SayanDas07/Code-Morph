@@ -108,13 +108,13 @@ const SlidingWindowPage: React.FC = () => {
       <div className="container mx-auto px-6 py-16">
         {/* Algorithm Visualization */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-          <Card className="mb-16 bg-slate-900/50 border-slate-800 shadow-2xl backdrop-blur-sm">
+          <Card className="mb-16 bg-slate-900/50 border-slate-800 shadow-2xl backdrop-blur-sm w-auto">
             <CardHeader className="border-b border-slate-800">
               <CardTitle className="text-2xl font-bold text-slate-200">Algorithm Visualization</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="bg-slate-950/50 p-8 rounded-lg backdrop-blur-sm">
-                <WindowAnimation array={[1, 3, 5, 7, 9, 11, 13]} k={3} />
+                <WindowAnimation array={[11, 23, -5, -99, 11, 13 ,48 ,-23]} k={3} />
               </div>
             </CardContent>
           </Card>

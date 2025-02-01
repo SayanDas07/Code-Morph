@@ -63,17 +63,17 @@ export const algorithms: Algorithm[] = [
         problems: [
             {
                 id: "sw1",
-                name: "Maximum subarray sum",
+                name: "Maximum sum of a subarray",
                 difficulty: "Medium",
-                description: "Find the maximum subarray sum",
+                description: "Find the maximum sum of a subarray of fixed size k",
                 Link: "/slidingwindowalgo/slidingWindow"
             },
             {
                 id: "sw2",
-                name: "Detect Cycle",
+                name: "Maximum Consecutive Ones After Flipping K Zeros",
                 difficulty: "Medium",
-                description: "Detect if a linked list has a cycle",
-                leetcodeLink: "/slidingwindowalgo/slidingWindow"
+                description: "Check if one string's permutation is a substring of another",
+                leetcodeLink: "/slidingwindowalgo/flipKzero"
             },
         ]
     }

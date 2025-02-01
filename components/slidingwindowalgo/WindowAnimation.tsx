@@ -10,32 +10,47 @@ interface Props {
 
 export default function WindowAnimation({ array, k }: Props) {
   const [windowStart, setWindowStart] = useState(0);
+  const [windowSum, setWindowSum] = useState(0);
+  const [maxSum, setMaxSum] = useState(Number.MIN_SAFE_INTEGER);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     if (!isPlaying || isFinished) return;
 
+    // Start with the sum of the first window
+    if (windowStart === 0) {
+      const initialSum = array.slice(0, k).reduce((sum, num) => sum + num, 0);
+      setWindowSum(initialSum);
+      setMaxSum(initialSum);
+    }
+
     const interval = setInterval(() => {
       setWindowStart((prev) => {
         const nextWindowStart = prev + 1;
+        
         if (nextWindowStart <= array.length - k) {
+          const newSum = windowSum + array[nextWindowStart + k - 1] - array[nextWindowStart - 1];
+          setWindowSum(newSum);
+          setMaxSum((prevMax) => Math.max(prevMax, newSum));
           return nextWindowStart;
         } else {
-          setIsFinished(true); // End the animation when the window reaches the end
-          clearInterval(interval); // Stop the interval once animation is finished
+          setIsFinished(true); // Stop animation when the window reaches the end
+          clearInterval(interval);
           return prev;
         }
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPlaying, array, k, isFinished]);
+  }, [isPlaying, array, k, isFinished, windowSum]);
 
   const handlePlayPause = () => {
     if (isFinished) {
       setIsFinished(false);
       setWindowStart(0);
+      setWindowSum(array.slice(0, k).reduce((sum, num) => sum + num, 0));
+      setMaxSum(array.slice(0, k).reduce((sum, num) => sum + num, 0));
     }
     setIsPlaying(!isPlaying);
   };
@@ -44,12 +59,14 @@ export default function WindowAnimation({ array, k }: Props) {
     setIsPlaying(false);
     setIsFinished(false);
     setWindowStart(0);
+    setWindowSum(0);
+    setMaxSum(Number.MIN_SAFE_INTEGER);
   };
 
   return (
     <div className="flex flex-col items-center gap-4 bg-slate-900 p-6 rounded-lg shadow-lg w-full max-w-xl">
       {/* Sliding Window Animation */}
-      <div className="flex gap-2 text-xl font-bold mb-4">
+      <div className="flex gap-2 text-xl font-bold mb-4 overflow-x-auto">
         {array.map((num, idx) => (
           <motion.div
             key={idx}
@@ -63,6 +80,22 @@ export default function WindowAnimation({ array, k }: Props) {
           </motion.div>
         ))}
       </div>
+
+      {/* Window Sum & Max Sum */}
+    <div className="text-lg text-white">
+        <p>Current Window Sum: 
+            <span className="font-bold text-yellow-300">
+            {isPlaying || isFinished ? windowSum : ""}
+            </span>
+        </p>
+        <p>Maximum Sum Found: 
+            <span className="font-bold text-green-400">
+            {isPlaying || isFinished ? maxSum : ""}
+            </span>
+        </p>
+    </div>
+
+
 
       {/* Controls */}
       <div className="flex gap-4 mb-6">
@@ -93,7 +126,7 @@ export default function WindowAnimation({ array, k }: Props) {
           transition={{ duration: 0.5 }}
           className="mt-4 text-2xl font-bold text-blue-300"
         >
-          End of Array!
+          Max Subarray Sum: {maxSum}
         </motion.div>
       )}
     </div>
