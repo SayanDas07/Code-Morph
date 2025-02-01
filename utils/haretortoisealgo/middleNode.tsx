@@ -1,12 +1,11 @@
 "use client";
-import { TabsContent, Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { Check } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
 
 import { SiLeetcode } from 'react-icons/si';
 
 
-export function Theory() {
+export const Theory = () => {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold">Theory: Finding the Middle Node in a Linked List</h2>
@@ -48,223 +47,246 @@ export function Theory() {
         <li>Continue moving the pointers until the <strong>fast</strong> pointer reaches the end of the list.</li>
         <li>At this point, the <strong>slow</strong> pointer will be at the middle of the list, regardless of whether the list size is even or odd.</li>
       </ol>
+
+      <h3 className="text-xl font-semibold">Examples:</h3>
+
+      <div className="space-y-4">
+        <div>
+          <h4 className="text-lg font-semibold">Example 1: Odd-Sized Linked List (1 → 2 → 3 → 4 → 5 → 6 → 7)</h4>
+          <p>
+            - Start with both <strong>slow</strong> and <strong>fast</strong> pointers at node <strong>1</strong>.
+          </p>
+          <p>
+            - Move <strong>slow</strong> to node <strong>2</strong> and <strong>fast</strong> to node <strong>3</strong>.
+          </p>
+          <p>
+            - Move <strong>slow</strong> to node <strong>3</strong> and <strong>fast</strong> to node <strong>5</strong>.
+          </p>
+          <p>
+            - Move <strong>slow</strong> to node <strong>4</strong> and <strong>fast</strong> to node <strong>7</strong>.
+          </p>
+          <p>
+            - The <strong>fast</strong> pointer has reached the end of the list, so the <strong>slow</strong> pointer stops at node <strong>4</strong>, which is the middle node.
+          </p>
+          <p className="bg-gray-100 p-3 rounded-md">
+            <strong>Result:</strong> The middle node is <strong>4</strong>.
+          </p>
+        </div>
+
+        <div>
+          <h4 className="text-lg font-semibold">Example 2: Even-Sized Linked List (1 → 2 → 3 → 4 → 5 → 6)</h4>
+          <p>
+            - Start with both <strong>slow</strong> and <strong>fast</strong> pointers at node <strong>1</strong>.
+          </p>
+          <p>
+            - Move <strong>slow</strong> to node <strong>2</strong> and <strong>fast</strong> to node <strong>3</strong>.
+          </p>
+          <p>
+            - Move <strong>slow</strong> to node <strong>3</strong> and <strong>fast</strong> to node <strong>5</strong>.
+          </p>
+          <p>
+            - Move <strong>slow</strong> to node <strong>4</strong> and <strong>fast</strong> to <strong>null</strong> (end of the list).
+          </p>
+          <p>
+            - The <strong>fast</strong> pointer has reached the end of the list, so the <strong>slow</strong> pointer stops at node <strong>4</strong>, which is the second middle node.
+          </p>
+          <p className="bg-gray-100 p-3 rounded-md">
+            <strong>Result:</strong> The middle node is <strong>4</strong> (second middle node in an even-sized list).
+          </p>
+        </div>
+      </div>
     </div>
   );
+};
+
+
+
+export const CodeSnippet = () => {
+  const [copyStatus, setCopyStatus] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('cpp');
+
+  const codeImplementations: { [key: string]: string } = {
+    cpp: `#include <iostream>
+using namespace std;
+
+// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode *slow = head;
+        ListNode *fast = head;
+
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return slow;
+    }
+};
+
+// Utility function to create and print a linked list
+void printList(ListNode* head) {
+    while (head) {
+        cout << head->val << " -> ";
+        head = head->next;
+    }
+    cout << "NULL\n";
 }
 
-export function CodeSnippet() {
-  const [activeTab, setActiveTab] = useState("cpp");
-  const [copyStatus, setCopyStatus] = useState<{ [key: string]: boolean }>({});
+int main() {
+    // Example: 1 -> 2 -> 3 -> 4 -> 5
+    ListNode* head = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
+    
+    Solution sol;
+    ListNode* middle = sol.middleNode(head);
 
-  const codeImplementations = {
-    cpp: `#include <iostream>
-          using namespace std;
-
-          struct ListNode {
-              int val;
-              ListNode *next;
-              ListNode() : val(0), next(nullptr) {}
-              ListNode(int x) : val(x), next(nullptr) {}
-              ListNode(int x, ListNode *next) : val(x), next(next) {}
-          };
-
-          class Solution {
-          public:
-              // Finds middle node of the linked list
-              ListNode* middleNode(ListNode* head) {
-                  ListNode *slow = head;
-                  ListNode *fast = head;
-                  while (fast != nullptr && fast->next != nullptr) {
-                      slow = slow->next;
-                      fast = fast->next->next;
-                  }
-                  return slow;
-              }
-              
-              // Detects if there's a cycle in the linked list
-              bool hasCycle(ListNode* head) {
-                  ListNode *slow = head;
-                  ListNode *fast = head;
-                  while (fast != nullptr && fast->next != nullptr) {
-                      slow = slow->next;
-                      fast = fast->next->next;
-                      if (slow == fast) return true;
-                  }
-                  return false;
-              }
-          };`,
+    cout << "Middle Node: " << middle->val << endl;
+    return 0;
+}
+`,
     python: `class ListNode:
-              def __init__(self, val=0, next=None):
-                  self.val = val
-                  self.next = next
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
-          class Solution:
-              def middleNode(self, head: ListNode) -> ListNode:
-                  """
-                  Finds the middle node of the linked list
-                  Time Complexity: O(n)
-                  Space Complexity: O(1)
-                  """
-                  slow = fast = head
-                  while fast and fast.next:
-                      slow = slow.next
-                      fast = fast.next.next
-                  return slow
-              
-              def hasCycle(self, head: ListNode) -> bool:
-                  """
-                  Detects if there's a cycle in the linked list
-                  Time Complexity: O(n)
-                  Space Complexity: O(1)
-                  """
-                  if not head or not head.next:
-                      return False
-                  
-                  slow = fast = head
-                  while fast and fast.next:
-                      slow = slow.next
-                      fast = fast.next.next
-                      if slow == fast:
-                          return True
-                  return False`,
-    java: `public class ListNode {
-              int val;
-              ListNode next;
-              ListNode() {}
-              ListNode(int val) { this.val = val; }
-              ListNode(int val, ListNode next) { 
-                  this.val = val; 
-                  this.next = next;
-              }
-          }
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow = fast = head
 
-          class Solution {
-              /**
-               * Finds the middle node of the linked list
-               * Time Complexity: O(n)
-               * Space Complexity: O(1)
-               */
-              public ListNode middleNode(ListNode head) {
-                  ListNode slow = head;
-                  ListNode fast = head;
-                  while (fast != null && fast.next != null) {
-                      slow = slow.next;
-                      fast = fast.next.next;
-                  }
-                  return slow;
-              }
-              
-              /**
-               * Detects if there's a cycle in the linked list
-               * Time Complexity: O(n)
-               * Space Complexity: O(1)
-               */
-              public boolean hasCycle(ListNode head) {
-                  if (head == null || head.next == null) {
-                      return false;
-                  }
-                  
-                  ListNode slow = head;
-                  ListNode fast = head;
-                  while (fast != null && fast.next != null) {
-                      slow = slow.next;
-                      fast = fast.next.next;
-                      if (slow == fast) {
-                          return true;
-                      }
-                  }
-                  return false;
-              }
-          }`,
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
 
+        return slow
+
+# Utility function to print linked list
+def printList(head):
+    while head:
+        print(head.val, end=" -> ")
+        head = head.next
+    print("NULL")
+
+# Example: 1 -> 2 -> 3 -> 4 -> 5
+head = ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5)))))
+
+sol = Solution()
+middle = sol.middleNode(head)
+
+print("Middle Node:", middle.val)
+`,
+    java: `// Definition for singly-linked list.
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode() { this.val = 0; this.next = null; }
+    ListNode(int val) { this.val = val; this.next = null; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+
+    // Utility function to print linked list
+    public static void printList(ListNode head) {
+        while (head != null) {
+            System.out.print(head.val + " -> ");
+            head = head.next;
+        }
+        System.out.println("NULL");
+    }
+
+    public static void main(String[] args) {
+        // Example: 1 -> 2 -> 3 -> 4 -> 5
+        ListNode head = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
+
+        Solution sol = new Solution();
+        ListNode middle = sol.middleNode(head);
+
+        System.out.println("Middle Node: " + middle.val);
+    }
+}
+`
   };
 
-  const copyToClipboard = async (code: string, language: string) => {
+  const copyToClipboard = async (code: string) => {
     try {
       await navigator.clipboard.writeText(code);
-      setCopyStatus({ ...copyStatus, [language]: true });
-      setTimeout(() => {
-        setCopyStatus({ ...copyStatus, [language]: false });
-      }, 2000);
+      setCopyStatus(true);
+      setTimeout(() => setCopyStatus(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
   };
 
+  const languages = Object.keys(codeImplementations);
+
   return (
-    <div className="w-full rounded-lg border border-slate-700">
-      <Tabs value={activeTab} className="w-full" onValueChange={setActiveTab}>
-        <div className="flex items-center justify-between px-4 py-2 bg-slate-800">
-          <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-slate-700/50 p-1">
-            {Object.keys(codeImplementations).map((lang) => (
-              <TabsTrigger
-                key={lang}
-                value={lang}
-                className="ring-offset-slate-800 focus-visible:ring-slate-400 data-[state=active]:bg-slate-900 data-[state=active]:text-slate-50 px-3 py-1.5 text-sm font-medium transition-all hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm"
-              >
-                {lang.toUpperCase()}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
-
-        <div className="relative max-h-[600px] overflow-y-auto">
-          {Object.entries(codeImplementations).map(([lang, code]) => (
-            <TabsContent key={lang} value={lang} className="relative m-0">
-              <div className="relative bg-slate-900 p-4">
-
-                {/* Code Block */}
-                <pre className="p-4 m-0 overflow-x-auto">
-                  <code className="text-sm font-mono text-slate-50 whitespace-pre">
-                    {code}
-                  </code>
-                </pre>
-
-                {/* Copy Button at Bottom Center */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                  <button
-                    onClick={() => copyToClipboard(code, lang)}
-                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium shadow-md transition-all duration-300 flex items-center gap-2 text-sm active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
-                    type="button"
-                    aria-label="Copy code"
-                  >
-                    {copyStatus[lang] ? (
-                      <>
-                        <Check className="w-5 h-5 text-green-400" />
-                        <span className="text-green-400 font-semibold">Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                          />
-                        </svg>
-                        <span className="font-semibold">Copy</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-
-              </div>
-            </TabsContent>
+    <div className="w-full rounded-lg border border-slate-700 bg-slate-900 overflow-hidden">
+      {/* Header with Language Selector and Copy Button */}
+      <div className="border-b border-slate-700 p-2 bg-slate-800 flex justify-between items-center">
+        <div className="flex gap-2">
+          {languages.map((lang) => (
+            <button
+              key={lang}
+              onClick={() => setSelectedLanguage(lang)}
+              className={`px-3 py-1.5 rounded text-sm font-medium transition-all ${selectedLanguage === lang
+                ? 'bg-slate-900 text-slate-50'
+                : 'text-slate-400 hover:bg-slate-700'
+                }`}
+            >
+              {lang.toUpperCase()}
+            </button>
           ))}
         </div>
-      </Tabs>
+
+        {/* Copy Button - Now just an icon */}
+        <button
+          onClick={() => copyToClipboard(codeImplementations[selectedLanguage])}
+          className="p-2 rounded-lg hover:bg-slate-700 transition-all duration-200 text-slate-400 hover:text-slate-200"
+          title="Copy code"
+        >
+          {copyStatus ? (
+            <Check className="w-5 h-5 text-green-400" />
+          ) : (
+            <Copy className="w-5 h-5" />
+          )}
+        </button>
+      </div>
+
+      {/* Code Display */}
+      <div className="relative">
+        <pre className="p-4 m-0 overflow-x-auto">
+          <code className="text-sm font-mono text-slate-50 whitespace-pre">
+            {codeImplementations[selectedLanguage]}
+          </code>
+        </pre>
+      </div>
     </div>
   );
-}
+};
 
 
-export function Practice() {
+
+export const Practice = () => {
   return (
     <div className="space-y-4">
       <p>Practice these problems to master the algorithm:</p>
@@ -283,13 +305,13 @@ export function Practice() {
       </ul>
     </div>
   );
-  
+
 }
 
 
 
 
-export function Complexity() {
+export const Complexity = () => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -304,8 +326,8 @@ export function Complexity() {
         <h3 className="font-semibold">Advantages</h3>
         <ul className="list-disc list-inside space-y-1">
           <li>Constant extra space</li>
-          <li>Simple implementation</li>
-          <li>Handles both cycle detection and middle finding</li>
+
+
         </ul>
       </div>
     </div>

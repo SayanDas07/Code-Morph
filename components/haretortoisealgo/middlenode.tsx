@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 const oddList = [1, 2, 3, 4, 5, 6, 7];
 const evenList = [1, 2, 3, 4, 5, 6];
@@ -11,7 +12,7 @@ export default function MiddleNodeFinder() {
   const [tortoiseIndex, setTortoiseIndex] = useState(0);
   const [hareIndex, setHareIndex] = useState(0);
   const [middleNode, setMiddleNode] = useState<number | null>(null);
-  const [running, setRunning] = useState(true);
+  const [running, setRunning] = useState(false);
 
   const currentList = isOddArray ? oddList : evenList;
 
@@ -19,9 +20,7 @@ export default function MiddleNodeFinder() {
     if (!running || middleNode !== null) return;
 
     const interval = setInterval(() => {
-     
       const nextHareIndex = hareIndex + 2;
-
       
       const shouldStop = isOddArray
         ? nextHareIndex >= currentList.length
@@ -34,7 +33,6 @@ export default function MiddleNodeFinder() {
         return;
       }
 
-   
       setTortoiseIndex(prevTortoise => prevTortoise + 1);
       setHareIndex(nextHareIndex);
     }, 1000);
@@ -59,7 +57,10 @@ export default function MiddleNodeFinder() {
         <button
           onClick={() => {
             setIsOddArray(true);
-            resetSimulation();
+            setTortoiseIndex(0);
+            setHareIndex(0);
+            setMiddleNode(null);
+            setRunning(false);
           }}
           className={`px-4 py-2 rounded-lg font-semibold transition
                         ${isOddArray
@@ -71,7 +72,10 @@ export default function MiddleNodeFinder() {
         <button
           onClick={() => {
             setIsOddArray(false);
-            resetSimulation();
+            setTortoiseIndex(0);
+            setHareIndex(0);
+            setMiddleNode(null);
+            setRunning(false);
           }}
           className={`px-4 py-2 rounded-lg font-semibold transition
                         ${!isOddArray
@@ -82,53 +86,65 @@ export default function MiddleNodeFinder() {
         </button>
       </div>
 
-      <div className="flex items-center space-x-4 p-4">
+      <div className="flex items-center p-4">
         {currentList.map((value, index) => (
-          <div
-            key={index}
-            className={`relative w-16 h-16 flex items-center justify-center rounded-full text-lg font-bold border-2 
-                            ${middleNode === value
-                ? 'bg-violet-900 border-violet-400'
-                : 'bg-slate-800 border-slate-600'}`}
-          >
-            {value}
-            {tortoiseIndex === index && (
-              <motion.div
-                initial={{ y: -10, scale: 0.5 }}
-                animate={{ y: 0, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="absolute w-6 h-6 bg-green-500 rounded-full top-[-20px] text-xs flex items-center justify-center font-bold"
-              >
-                T
-              </motion.div>
-            )}
-            {hareIndex === index && (
-              <motion.div
-                initial={{ y: 10, scale: 0.5 }}
-                animate={{ y: 0, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className="absolute w-6 h-6 bg-blue-500 rounded-full bottom-[-20px] text-xs flex items-center justify-center font-bold"
-              >
-                H
-              </motion.div>
+          <div key={index} className="flex items-center">
+            <div
+              className={`relative w-16 h-16 flex items-center justify-center rounded-full text-lg font-bold border-2 
+                              ${middleNode === value
+                  ? 'bg-violet-900 border-violet-400'
+                  : 'bg-slate-800 border-slate-600'}`}
+            >
+              {value}
+              {tortoiseIndex === index && (
+                <motion.div
+                  initial={{ y: -10, scale: 0.5 }}
+                  animate={{ y: 0, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute w-6 h-6 bg-green-500 rounded-full top-[-20px] text-xs flex items-center justify-center font-bold"
+                >
+                  T
+                </motion.div>
+              )}
+              {hareIndex === index && (
+                <motion.div
+                  initial={{ y: 10, scale: 0.5 }}
+                  animate={{ y: 0, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute w-6 h-6 bg-blue-500 rounded-full bottom-[-20px] text-xs flex items-center justify-center font-bold"
+                >
+                  H
+                </motion.div>
+              )}
+            </div>
+            {/* Add arrow after each node except the last one */}
+            {index < currentList.length - 1 && (
+              <div className="mx-2">
+                <ArrowRight className="text-slate-400" size={24} />
+              </div>
             )}
           </div>
         ))}
-        {/* NULL node for even-sized array */}
+        {/* NULL node for even-sized array with arrow */}
         {!isOddArray && (
-          <div className="relative w-16 h-16 flex items-center justify-center rounded-full text-lg font-bold border-2 border-slate-600 bg-slate-800 opacity-50">
-            NULL
-            {hareIndex === currentList.length && (
-              <motion.div
-                initial={{ y: 10, scale: 0.5 }}
-                animate={{ y: 0, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className="absolute w-6 h-6 bg-blue-500 rounded-full bottom-[-20px] text-xs flex items-center justify-center font-bold"
-              >
-                H
-              </motion.div>
-            )}
-          </div>
+          <>
+            <div className="mx-2">
+              <ArrowRight className="text-slate-400" size={24} />
+            </div>
+            <div className="relative w-16 h-16 flex items-center justify-center rounded-full text-lg font-bold border-2 border-slate-600 bg-slate-800 opacity-50">
+              NULL
+              {hareIndex === currentList.length && (
+                <motion.div
+                  initial={{ y: 10, scale: 0.5 }}
+                  animate={{ y: 0, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute w-6 h-6 bg-blue-500 rounded-full bottom-[-20px] text-xs flex items-center justify-center font-bold"
+                >
+                  H
+                </motion.div>
+              )}
+            </div>
+          </>
         )}
       </div>
 
@@ -147,7 +163,7 @@ export default function MiddleNodeFinder() {
         onClick={resetSimulation}
         className="mt-6 px-6 py-2 bg-violet-600 hover:bg-violet-500 transition rounded-lg text-white font-semibold"
       >
-        Restart Simulation
+        {!running && middleNode === null ? "Start Simulation" : "Restart Simulation"}
       </button>
     </div>
   );
