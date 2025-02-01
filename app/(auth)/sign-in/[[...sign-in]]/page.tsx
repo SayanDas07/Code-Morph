@@ -1,10 +1,5 @@
-
 import { SignIn } from "@clerk/nextjs";
 import Link from "next/link";
-<<<<<<< HEAD
-=======
-
->>>>>>> 847ef910126eecc8a74c2b83cc9af81a0da3e92d
 
 export default function Page() {
   return (
