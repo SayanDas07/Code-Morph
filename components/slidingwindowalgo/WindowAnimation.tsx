@@ -81,7 +81,7 @@ export default function WindowAnimation({ array, k }: Props) {
           className="px-6 py-3 rounded-lg text-white font-semibold bg-red-500 hover:bg-red-400 transition duration-300 ease-in-out"
           aria-label="Reset the animation"
         >
-          Reset
+          Restart
         </button>
       </div>
 

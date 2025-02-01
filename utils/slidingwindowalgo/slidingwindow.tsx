@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SiLeetcode } from "react-icons/si";
-import { Check } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 
 export const Theory = () => {
   return (
@@ -34,10 +33,10 @@ export const Theory = () => {
 };
 
 export const CodeSnippet = () => {
-  const [activeTab, setActiveTab] = useState("cpp");
-  const [copyStatus, setCopyStatus] = useState<{ [key: string]: boolean }>({});
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("cpp");
+  const [copyStatus, setCopyStatus] = useState(false);
 
-  const codeImplementations = {
+  const codeImplementations: { [Key: string]: string } = {
     cpp: `#include <vector>
     using namespace std;
 
@@ -109,68 +108,58 @@ export const CodeSnippet = () => {
     }`,
   };
 
-  const copyToClipboard = async (code: string, language: string) => {
+  const copyToClipboard = async (code: string) => {
     try {
       await navigator.clipboard.writeText(code);
-      setCopyStatus({ ...copyStatus, [language]: true });
-      setTimeout(() => {
-        setCopyStatus({ ...copyStatus, [language]: false });
-      }, 2000);
+      setCopyStatus(true);
+      setTimeout(() => setCopyStatus(false), 2000);
     } catch (err) {
-      console.error("Failed to copy:", err);
+      console.error('Failed to copy:', err);
     }
   };
 
+  const languages = Object.keys(codeImplementations);
   return (
-    <div className="w-full rounded-lg border border-slate-700">
-      <Tabs value={activeTab} className="w-full" onValueChange={setActiveTab}>
-  <div className="flex items-center justify-between px-4 py-2 bg-slate-800">
-    <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-slate-700/50 p-1">
-      {Object.keys(codeImplementations).map((lang) => (
-       <TabsTrigger
-       key={lang}
-       value={lang}
-       className={`ring-offset-slate-800 focus-visible:ring-slate-400 px-3 py-2 text-sm font-medium transition-all hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-lg
-         ${activeTab === lang ? 'bg-blue-400 text-white border-2 border-blue-600' : 'bg-slate-700 text-slate-400'}`}
-     >
-       {lang.toUpperCase()}
-     </TabsTrigger>
-      ))}
-    </TabsList>
-  </div>
-
-  <div className="relative max-h-[600px] overflow-y-auto">
-    {Object.entries(codeImplementations).map(([lang, code]) => (
-      <TabsContent key={lang} value={lang} className="relative m-0">
-        <div className="relative bg-slate-900 p-4 rounded-lg">
-          {/* Code Block */}
-          <pre className="p-4 m-0 overflow-x-auto max-w-full">
-            <code className="text-sm font-mono text-slate-50 whitespace-pre-wrap">
-              {code}
-            </code>
-          </pre>
-
-
-          {/* Copy Button */}
-          <div className="absolute top-4 right-4 z-20">
+    <div className="w-full rounded-lg border border-slate-700 bg-slate-900 overflow-hidden">
+      {/* Header with Language Selector and Copy Button */}
+      <div className="border-b border-slate-700 p-2 bg-slate-800 flex justify-between items-center">
+        <div className="flex gap-2">
+          {languages.map((lang) => (
             <button
-              onClick={() => copyToClipboard(code, lang)}
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium shadow-md transition-all duration-300 flex items-center gap-2 text-sm active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900"
-              type="button"
-              aria-label="Copy code"
+              key={lang}
+              onClick={() => setSelectedLanguage(lang)}
+              className={`px-3 py-1.5 rounded text-sm font-medium transition-all ${selectedLanguage === lang
+                ? 'bg-slate-900 text-slate-50'
+                : 'text-slate-400 hover:bg-slate-700'
+                }`}
             >
-              {copyStatus[lang] ? (
-                <Check className="w-5 h-5 text-green-400" />
-              ) : (
-                <span className="font-semibold">Copy</span>
-              )}
+              {lang.toUpperCase()}
             </button>
-          </div>
+          ))}
         </div>
-      </TabsContent>
-    ))}
-  </div>
-</Tabs>
+
+        {/* Copy Button - Now just an icon */}
+        <button
+          onClick={() => copyToClipboard(codeImplementations[selectedLanguage])}
+          className="p-2 rounded-lg hover:bg-slate-700 transition-all duration-200 text-slate-400 hover:text-slate-200"
+          title="Copy code"
+        >
+          {copyStatus ? (
+            <Check className="w-5 h-5 text-green-400" />
+          ) : (
+            <Copy className="w-5 h-5" />
+          )}
+        </button>
+      </div>
+
+      {/* Code Display */}
+      <div className="relative">
+        <pre className="p-4 m-0 overflow-x-auto">
+          <code className="text-sm font-mono text-slate-50 whitespace-pre">
+            {codeImplementations[selectedLanguage]}
+          </code>
+        </pre>
+      </div>
     </div>
   );
 };
