@@ -57,23 +57,23 @@ export const algorithms: Algorithm[] = [
     },
     {
         id: 3,
-        name: "fveawfgeawrgf",
+        name: "Sliding window technique",
         description: "ergfergf",
-        category: "Linked List",
+        category: "Array",
         problems: [
             {
-                id: "hescft1",
-                name: "Find Middle Node",
-                difficulty: "Easy",
-                description: "Find the middle node of a linked list",
-                Link: "/haretortoisealgo/middleNode"
+                id: "sw1",
+                name: "Maximum subarray sum",
+                difficulty: "Medium",
+                description: "Find the maximum subarray sum",
+                Link: "/slidingwindowalgo/slidingWindow"
             },
             {
-                id: "htewf2",
+                id: "sw2",
                 name: "Detect Cycle",
                 difficulty: "Medium",
                 description: "Detect if a linked list has a cycle",
-                leetcodeLink: "/haretortoisealgorithm/detectCycle"
+                leetcodeLink: "/slidingwindowalgo/slidingWindow"
             },
         ]
     }
