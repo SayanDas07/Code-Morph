@@ -22,7 +22,7 @@ export function SearchSection() {
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center gap-3 mb-4">
                     <Code2 className="h-10 w-10 text-blue-400" />
-                    <h1 className="text-4xl font-bold text-white">Algorithm Practice</h1>
+                    <h1 className="text-4xl font-bold text-white">Practice Algorithm </h1>
                 </div>
                 <p className="text-blue-300 text-lg mb-8">
                     Master your coding skills with our curated collection of algorithms and problems
