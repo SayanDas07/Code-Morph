@@ -35,7 +35,7 @@ export const algorithms: Algorithm[] = [
                 name: "Detect Cycle",
                 difficulty: "Medium",
                 description: "Detect if a linked list has a cycle",
-                Link: "/haretortoisealgorithm/detectCycle"
+                Link: "/haretortoisealgo/detectCycle"
             },
         ]
     },
