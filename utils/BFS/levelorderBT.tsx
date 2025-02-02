@@ -69,7 +69,7 @@ export const CodeSnippet = () => {
     const [copyStatus, setCopyStatus] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState<'cpp' | 'python' | 'java'>('cpp');
 
-    const codeImplementations: { [key in 'cpp' | 'python' | 'java']: string } = {
+    const codeImplementations: { [key in 'cpp' | 'python' | 'java' | 'javascript']: string } = {
         cpp: `#include <iostream>
 #include <vector>
 #include <queue>
@@ -242,6 +242,53 @@ public class Solution {
         }
     }
 }
+`,
+    javascript:
+    `class TreeNode {
+    constructor(val, left = null, right = null) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+class Solution {
+    levelOrder(root) {
+        let ans = [];
+        if (!root) return ans;
+
+        let queue = [root];
+
+        while (queue.length > 0) {
+            let level = [];
+            let size = queue.length;
+
+            for (let i = 0; i < size; i++) {
+                let node = queue.shift();
+                if (node.left) queue.push(node.left);
+                if (node.right) queue.push(node.right);
+                level.push(node.val);
+            }
+            ans.push(level);
+        }
+
+        return ans;
+    }
+}
+
+// Creating the binary tree
+let root = new TreeNode(1);
+root.left = new TreeNode(2);
+root.right = new TreeNode(3);
+root.left.left = new TreeNode(4);
+root.left.right = new TreeNode(5);
+root.right.right = new TreeNode(6);
+
+let solution = new Solution();
+let result = solution.levelOrder(root);
+
+// Print the result
+result.forEach(level => console.log(level.join(" ")));
 `
     };
 
