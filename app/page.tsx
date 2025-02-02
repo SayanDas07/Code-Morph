@@ -15,7 +15,7 @@ export default async function Home() {
           <div className="flex items-center gap-2">
             <Code2Icon className="w-8 h-8 text-cyan-400" />
             <span className="text-3xl font-extrabold tracking-tighter">
-              Code<span className="text-cyan-400">Flow</span>
+              Code<span className="text-cyan-400">Morph</span>
             </span>
           </div>
 
