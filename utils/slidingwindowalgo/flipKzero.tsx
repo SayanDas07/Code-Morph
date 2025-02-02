@@ -39,8 +39,8 @@ export const CodeSnippet = () => {
   const [copyStatus, setCopyStatus] = useState(false);
 
   const codeImplementations: { [Key: string]: string } = {
-    cpp: `// C++ Code: Sliding Window for longest 1s after flipping k zeros
-#include <vector>
+    cpp: 
+`#include <vector>
 #include <algorithm>
 using namespace std;
 
@@ -70,8 +70,8 @@ int longestOnes(vector<int>& nums, int k) {
 }
 `,
 
-    python: `# Python Code: Sliding Window for longest 1s after flipping k zeros
-def longestOnes(nums, k):
+    python: 
+`def longestOnes(nums, k):
     left = 0
     right = 0
     zero_count = 0
@@ -93,8 +93,8 @@ def longestOnes(nums, k):
     return max_len
 `,
 
-    java: `// Java Code: Sliding Window for longest 1s after flipping k zeros
-public class Solution {
+    java:
+`public class Solution {
     public int longestOnes(int[] nums, int k) {
         int left = 0;
         int right = 0;
@@ -123,8 +123,8 @@ public class Solution {
 }
 `,
 
-    javascript: `// JavaScript Code: Sliding Window for longest 1s after flipping k zeros
-function longestOnes(nums, k) {
+    javascript: 
+`function longestOnes(nums, k) {
   let left = 0;
   let right = 0;
   let zeroCount = 0;

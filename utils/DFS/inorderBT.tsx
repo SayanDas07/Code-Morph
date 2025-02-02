@@ -70,7 +70,7 @@ export const CodeSnippet = () => {
     const [copyStatus, setCopyStatus] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState<'cpp' | 'python' | 'java'>('cpp');
 
-    const codeImplementations: { [key in 'cpp' | 'python' | 'java']: string } = {
+    const codeImplementations: { [key in 'cpp' | 'python' | 'java' | 'javascript']: string } = {
         cpp: `#include <iostream> 
 using namespace std;
 
@@ -149,7 +149,34 @@ public class PreorderTraversal {
         
         preorder(root);
     }
-}`
+}`,
+ javascript :
+ `class TreeNode {
+    constructor(x) {
+        this.val = x;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+function preorder(root) {
+    if (!root) return;
+    
+    preorder(root.left);
+    console.log(root.val);
+    preorder(root.right);
+}
+
+let root = new TreeNode(1);
+root.left = new TreeNode(2);
+root.right = new TreeNode(3);
+root.left.left = new TreeNode(4);
+root.left.right = new TreeNode(5);
+root.right.right = new TreeNode(6);
+
+preorder(root);
+`
+
     };
 
     const copyToClipboard = async (code: string) => {

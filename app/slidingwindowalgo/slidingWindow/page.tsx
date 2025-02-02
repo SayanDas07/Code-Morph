@@ -1,81 +1,54 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React from "react";
 import WindowAnimation from "@/components/slidingwindowalgo/WindowAnimation";
 import { Theory, CodeSnippet, Practice, Complexity } from "@/utils/slidingwindowalgo/slidingwindow";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { BookOpen, Code, Brain, TrendingUp } from "lucide-react";
 
-// Define a type for the content sections
-interface ContentSection {
-  title: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  type: string;
-  description: string;
-  ref: React.RefObject<HTMLDivElement | null>;  // Allow ref to be null as well
-}
+const SlidingWindowPage = () => {
 
-const SlidingWindowPage: React.FC = () => {
-  const [selectedContent, setSelectedContent] = useState<string | null>(null);
+  const contentSections = [
+      {
+        title: "Algorithm Theory",
+        icon: BookOpen,
+        type: "Learn Theory",
+        description: "Understanding the fundamental concepts and mechanics",
+        component: Theory,
+        id:"theory-section"
+      },
+      {
+        title: "Implementation",
+        icon: Code,
+        type: "View Code",
+        description: "Step-by-step code implementation with explanations",
+        component: CodeSnippet,
+        id:"implementation-section"
+      },
+      {
+        title: "Practice Examples",
+        icon: Brain,
+        type: "Practice Problems",
+        description: "Real-world applications and problem sets",
+        component: Practice,
+        id: "practice-problem"    
+      },
+      {
+        title: "Performance Analysis",
+        icon: TrendingUp,
+        type: "Analyze Complexity",
+        description: "Time and space complexity breakdown",
+        component: Complexity,
+        id: "complexity-section" 
+      },
+    ];
 
-  // Updated the sections to follow the ContentSection type
-  const contentSections: ContentSection[] = [
-    {
-      title: "Algorithm Theory",
-      icon: BookOpen,
-      type: "Learn Theory",
-      description: "Understanding the fundamental concepts and mechanics",
-      ref: useRef<HTMLDivElement | null>(null),  // Use null to allow the reference to be null
-    },
-    {
-      title: "Implementation",
-      icon: Code,
-      type: "View Code",
-      description: "Step-by-step code implementation with explanations",
-      ref: useRef<HTMLDivElement | null>(null),
-    },
-    {
-      title: "Practice Examples",
-      icon: Brain,
-      type: "Practice Problems",
-      description: "Real-world applications and problem sets",
-      ref: useRef<HTMLDivElement | null>(null),
-    },
-    {
-      title: "Performance Analysis",
-      icon: TrendingUp,
-      type: "Analyze Complexity",
-      description: "Time and space complexity breakdown",
-      ref: useRef<HTMLDivElement | null>(null),
-    },
-  ];
-
-  const renderContent = (type: string) => {
-    switch (type) {
-      case "Learn Theory":
-        return <Theory />;
-      case "Practice Problems":
-        return <Practice />;
-      case "View Code":
-        return <CodeSnippet />;
-      case "Analyze Complexity":
-        return <Complexity />;
-      default:
-        return null;
-    }
-  };
-
-  // Function to handle the click event and scroll to the respective section
-  const handleClick = (section: ContentSection) => {
-    // Scroll to the section using the ref
-    section.ref.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start", // Ensures the section scrolls to the top of the viewport
-    });
-
-    // Toggle the selected content
-    setSelectedContent(selectedContent === section.type ? null : section.type);
+    const scrollToSection = (id: string) => {
+      const element = document.getElementById(id);
+      if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
   };
 
   return (
@@ -119,62 +92,64 @@ const SlidingWindowPage: React.FC = () => {
           </Card>
         </motion.div>
 
+        {/* Navigation Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          {contentSections.map((section, index) => (
+            <motion.div
+              key={section.type}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 * index }}
+            >
+            <Card
+              className="cursor-pointer transition-all bg-slate-900/50 border-slate-800
+              backdrop-blur-sm hover:bg-slate-800/50 hover:ring-1 hover:ring-violet-500"
+              onClick={() => scrollToSection(section.id)}
+            >
+            <CardContent className="p-8">
+              <section.icon className="w-10 h-10 mb-6 text-violet-400" />
+                <h3 className="text-xl font-bold text-slate-200 mb-3">
+                  {section.title}
+                </h3>
+                <p className="text-slate-400">
+                  {section.description}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+          ))}
+        </div>
+                     
         {/* Content Sections */}
-        <div className="space-y-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="space-y-16">
             {contentSections.map((section, index) => (
               <motion.div
-                key={section.title}
+                key={section.type}
+                id={section.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 * index }}
               >
-                <Card
-                  className={`cursor-pointer h-full transition-all bg-slate-900/50 border-slate-800
-                  backdrop-blur-sm hover:bg-slate-800/50 
-                  ${selectedContent === section.type ? "ring-2 ring-violet-500 shadow-lg shadow-violet-500/20" : "hover:ring-1 hover:ring-slate-700"}`}
-                  onClick={() => handleClick(section)}
-                >
-                  <CardContent className="p-8">
-                    <section.icon
-                      className={`w-10 h-10 mb-6 ${selectedContent === section.type ? "text-violet-400" : "text-slate-400"}`}
-                    />
-                    <h3 className="text-xl font-bold text-slate-200 mb-3">{section.title}</h3>
-                    <p className="text-slate-400">{section.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Section Content Rendered Here */}
-          {contentSections.map((section, index) => (
-            <div
-              key={section.type}
-              ref={section.ref}  // Ensure each section has a ref
-              className="mt-8"
-            >
-              {/* Only render the content for the selected section */}
-              {selectedContent === section.type && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 * index }}
-                >
-                  <Card className="bg-slate-900/50 border-slate-800 shadow-2xl backdrop-blur-sm">
-                    <CardHeader className="border-b border-slate-800">
-                      <CardTitle className="text-2xl font-bold text-slate-200">{section.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-8 text-slate-300">{renderContent(section.type)}</CardContent>
-                  </Card>
-                </motion.div>
-              )}
-            </div>
-          ))}
-        </div>
+              <Card className="bg-slate-900/50 border-slate-800 shadow-2xl backdrop-blur-sm">
+                <CardHeader className="border-b border-slate-800">
+                  <div className="flex items-center space-x-4">
+                    <section.icon className="w-8 h-8 text-violet-400" />
+                      <CardTitle className="text-2xl font-bold text-slate-200">
+                        {section.title}
+                      </CardTitle>
+                    </div>
+                  </CardHeader>
+                <CardContent className="p-8 text-slate-300">
+              <section.component />
+            </CardContent>
+          </Card>
+        </motion.div>
+        ))}
       </div>
     </div>
+  </div>
   );
 };
+                   
 
 export default SlidingWindowPage;
