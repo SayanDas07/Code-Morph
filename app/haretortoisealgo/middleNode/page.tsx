@@ -1,55 +1,52 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import HareTortoise from "@/components/haretortoisealgo/middlenode";
 import { Theory, CodeSnippet, Practice, Complexity } from "@/utils/haretortoisealgo/middleNode";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-
 import { motion } from "framer-motion";
 import { BookOpen, Code, Brain, TrendingUp } from 'lucide-react';
 
-const HareTortoisePage: React.FC = () => {
-    const [selectedContent, setSelectedContent] = useState<string | null>(null);
-
+const HareTortoisePage = () => {
     const contentSections = [
         {
             title: "Algorithm Theory",
             icon: BookOpen,
             type: "Learn Theory",
-            description: "Understanding the fundamental concepts and mechanics"
+            description: "Understanding the fundamental concepts and mechanics",
+            component: Theory,
+            id: "theory-section"
         },
         {
             title: "Implementation",
             icon: Code,
             type: "View Code",
-            description: "Step-by-step code implementation with explanations"
+            description: "Step-by-step code implementation with explanations",
+            component: CodeSnippet,
+            id: "implementation-section"
         },
         {
             title: "Practice Examples",
             icon: Brain,
             type: "Practice Problems",
-            description: "Real-world applications and problem sets"
+            description: "Real-world applications and problem sets",
+            component: Practice,
+            id: "practice-section"
         },
         {
             title: "Performance Analysis",
             icon: TrendingUp,
             type: "Analyze Complexity",
-            description: "Time and space complexity breakdown"
+            description: "Time and space complexity breakdown",
+            component: Complexity,
+            id: "complexity-section"
         }
     ];
 
-    const renderContent = (type: string) => {
-        switch (type) {
-            case "Learn Theory":
-                return <Theory />;
-            case "Practice Problems":
-                return <Practice />;
-            case "View Code":
-                return <CodeSnippet />;
-            case "Analyze Complexity":
-                return <Complexity />;
-            default:
-                return null;
+    const scrollToSection = (id: string) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     };
 
@@ -65,7 +62,7 @@ const HareTortoisePage: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent"
                         >
-                            Finding Middle Node in a Linked List(Hare and Tortoise)
+                            Finding Middle Node in a Linked List (Hare and Tortoise)
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -103,64 +100,59 @@ const HareTortoisePage: React.FC = () => {
                     </Card>
                 </motion.div>
 
-                {/* Content Sections */}
-                <div className="space-y-16">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 ">
-                        {contentSections.map((section, index) => (
-                            <motion.div
-                                key={section.title}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 * index }}
-                            >
-                                <Card
-                                    className={`cursor-pointer h-full transition-all bg-slate-900/50 border-slate-800
-                                        backdrop-blur-sm hover:bg-slate-800/50 
-                                        ${selectedContent === section.type
-                                            ? 'ring-2 ring-violet-500 shadow-lg shadow-violet-500/20'
-                                            : 'hover:ring-1 hover:ring-slate-700'}`}
-                                    onClick={() => setSelectedContent(
-                                        selectedContent === section.type ? null : section.type
-                                    )}
-                                >
-                                    <CardContent className="p-8">
-                                        <section.icon
-                                            className={`w-10 h-10 mb-6 
-                                                ${selectedContent === section.type
-                                                    ? 'text-violet-400'
-                                                    : 'text-slate-400'}`}
-                                        />
-                                        <h3 className="text-xl font-bold text-slate-200 mb-3">
-                                            {section.title}
-                                        </h3>
-                                        <p className="text-slate-400">
-                                            {section.description}
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    {/* Selected Content Display */}
-                    {selectedContent && (
+                {/* Navigation Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                    {contentSections.map((section, index) => (
                         <motion.div
+                            key={section.type}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
+                            transition={{ delay: 0.2 * index }}
                         >
-                            <Card className="bg-slate-900/50 border-slate-800 shadow-2xl backdrop-blur-sm">
-                                <CardHeader className="border-b border-slate-800">
-                                    <CardTitle className="text-2xl font-bold text-slate-200">
-                                        {contentSections.find(s => s.type === selectedContent)?.title}
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="p-8 text-slate-300">
-                                    {renderContent(selectedContent)}
+                            <Card
+                                className="cursor-pointer transition-all bg-slate-900/50 border-slate-800
+                                    backdrop-blur-sm hover:bg-slate-800/50 hover:ring-1 hover:ring-violet-500"
+                                onClick={() => scrollToSection(section.id)}
+                            >
+                                <CardContent className="p-8">
+                                    <section.icon className="w-10 h-10 mb-6 text-violet-400" />
+                                    <h3 className="text-xl font-bold text-slate-200 mb-3">
+                                        {section.title}
+                                    </h3>
+                                    <p className="text-slate-400">
+                                        {section.description}
+                                    </p>
                                 </CardContent>
                             </Card>
                         </motion.div>
-                    )}
+                    ))}
+                </div>
+
+                {/* Content Sections */}
+                <div className="space-y-16">
+                    {contentSections.map((section, index) => (
+                        <motion.div
+                            key={section.type}
+                            id={section.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 * index }}
+                        >
+                            <Card className="bg-slate-900/50 border-slate-800 shadow-2xl backdrop-blur-sm">
+                                <CardHeader className="border-b border-slate-800">
+                                    <div className="flex items-center space-x-4">
+                                        <section.icon className="w-8 h-8 text-violet-400" />
+                                        <CardTitle className="text-2xl font-bold text-slate-200">
+                                            {section.title}
+                                        </CardTitle>
+                                    </div>
+                                </CardHeader>
+                                <CardContent className="p-8 text-slate-300">
+                                    <section.component />
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </div>
