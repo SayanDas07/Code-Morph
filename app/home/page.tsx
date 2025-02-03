@@ -43,14 +43,14 @@ const UserProfileSection: React.FC = () => {
                 </div>
 
                 <div className="flex space-x-4 w-full">
-                    <button 
+                    <button
                         onClick={handleSignOut}
                         className="flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 text-sm font-semibold text-red-500 hover:text-white border-2 border-red-500 hover:border-red-600 rounded-lg transition-all duration-300 ease-in-out hover:bg-red-600"
                     >
                         <LogOut className="h-5 w-5" />
                         <span>Sign Out</span>
                     </button>
-                    <Link 
+                    <Link
                         href="/dashboard"
                         className="flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 text-sm font-semibold text-gray-300 hover:text-white border-2 border-gray-600 hover:border-gray-500 rounded-lg transition-all duration-300 ease-in-out hover:bg-gray-700"
                     >
@@ -77,7 +77,7 @@ const HomePage: React.FC = () => {
             <main className="flex-1 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-auto">
                 <div className="container mx-auto px-10 py-12 max-w-7xl">
                     <header className="mb-12 text-center">
-                        <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-6">
+                        <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-6 leading-normal">
                             Algorithm Visualizer
                         </h1>
                         <p className="text-gray-400 text-lg max-w-3xl mx-auto leading-relaxed">

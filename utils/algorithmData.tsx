@@ -111,6 +111,13 @@ export const algorithms: Algorithm[] = [
                 description: "Postorder traversal of a binary tree",
                 Link: "/DFS/postorderBT"
             },
+            {
+                id: "dfs4",
+                name: "DFS in Graph",
+                difficulty: "Medium",
+                description: "Depth First Search in a graph",
+                Link: "/DFS/dfsGraph"
+            }
 
         ]
     },
@@ -127,6 +134,14 @@ export const algorithms: Algorithm[] = [
                 description: "Level order traversal of a binary tree",
                 Link: "/BFS/levelorderBT"
             },
+            {
+                id: "bfs2",
+                name: "BFS in Graph",
+                difficulty: "Medium",
+                description: "Breadth First Search in a graph",
+                Link: "/BFS/bfsGraph"
+
+            }
 
         ]
     }

@@ -64,7 +64,7 @@ export default function WindowAnimation({ array, k }: Props) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 bg-slate-900 p-6 rounded-lg shadow-lg w-full max-w-xl">
+    <div className="flex flex-col items-center gap-4 bg-slate-900 p-6 rounded-lg shadow-lg w-full max-w-auto">
       {/* Sliding Window Animation */}
       <div className="flex gap-2 text-xl font-bold mb-4 overflow-x-auto">
         {array.map((num, idx) => (
