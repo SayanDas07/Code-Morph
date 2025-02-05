@@ -129,7 +129,7 @@ export const CodeSnippet = () => {
     const [copyStatus, setCopyStatus] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState<'cpp' | 'python' | 'java'>('cpp');
 
-    const codeImplementations: { [key in 'cpp' | 'python' | 'java']: string } = {
+    const codeImplementations: { [key in 'cpp' | 'python' | 'java' | 'javascript']: string } = {
         cpp: `class Solution {
 private : 
     int bs(vector<int>& a , int l , int h , int t){
@@ -198,6 +198,26 @@ public:
     }
 }
 
+`,
+        javascript:
+        `class Solution {
+    constructor() {}
+
+    binarySearch(arr, l, h, target) {
+        if (l > h) return -1;
+
+        let mid = l + Math.floor((h - l) / 2);
+
+        if (arr[mid] === target) return mid;
+        else if (arr[mid] > target) return this.binarySearch(arr, l, mid - 1, target);
+        else return this.binarySearch(arr, mid + 1, h, target);
+    }
+
+    search(nums, target) {
+        let n = nums.length;
+        return this.binarySearch(nums, 0, n - 1, target);
+    }
+}
 `
     };
 

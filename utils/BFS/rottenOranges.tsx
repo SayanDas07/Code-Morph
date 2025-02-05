@@ -107,7 +107,7 @@ export const CodeSnippet = () => {
     >("cpp");
 
     const codeImplementations: {
-        [key in "cpp" | "python" | "java"]: string;
+        [key in "cpp" | "python" | "java" | "javascript"]: string;
     } = {
         cpp: `class Solution {
 public:
@@ -272,8 +272,54 @@ class Solution {
 }
 
   `,
+  javascript:
+  `
+class Solution {
+    orangesRotting(grid) {
+        let rows = grid.length;
+        let cols = grid[0].length;
+        let queue = [];
+        let freshCount = 0;
+        let time = 0;
 
+        // Directions for moving up, right, down, left
+        let directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
+        // Initialize queue with all initially rotten oranges and count fresh ones
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (grid[i][j] === 2) {
+                    queue.push([i, j, 0]); // Store row, col, and time
+                } else if (grid[i][j] === 1) {
+                    freshCount++;
+                }
+            }
+        }
+
+        let rottenCount = 0;
+
+        // Process queue (BFS)
+        while (queue.length > 0) {
+            let [r, c, t] = queue.shift();
+            time = Math.max(time, t);
+
+            for (let [dx, dy] of directions) {
+                let nr = r + dx;
+                let nc = c + dy;
+
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === 1) {
+                    queue.push([nr, nc, t + 1]);
+                    grid[nr][nc] = 2; // Mark orange as rotten
+                    rottenCount++;
+                }
+            }
+        }
+
+        // If there are still fresh oranges, return -1
+        return freshCount > rottenCount ? -1 : time;
+    }
+}
+  `
     };
 
     const copyToClipboard = async (code: string) => {
