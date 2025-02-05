@@ -151,5 +151,21 @@ export const algorithms: Algorithm[] = [
             }
 
         ]
-    }
+    },
+    {
+        id: 6,
+        name: "Binary Search",
+        description: "Binary search is a search algorithm that finds the position of a target value within a sorted array",
+        category: "Array",
+        problems: [
+            {
+                id: "bs1",
+                name: "Binary Search",
+                difficulty: "Easy",
+                description: "Find an element in a sorted array",
+                Link: "/BS/search"
+            }
+        ]
+    },
+
 ];
