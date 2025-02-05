@@ -18,6 +18,29 @@ export interface Algorithm {
 
 export const algorithms: Algorithm[] = [
     {
+        "id": 0,
+        "name": "HashMap",
+        "description": "A data structure that stores key-value pairs for fast lookups, insertion, and deletion operations.",
+        "category": "Data Structures",
+        "problems": [
+                {
+                    "id": "hm1",
+                    "name": "Frequency of elements",
+                    "difficulty": "Easy",
+                    "description": "Given an array of integers. Count the frequency of each elements.",
+                    "Link": "/Hashmap/frequencymap"
+                },
+                {
+                    "id": "hm2",
+                    "name": "Two Sum",
+                    "difficulty": "Easy",
+                    "description": "Given an array of integers and a target, find two numbers that add up to the target.",
+                    "Link": "/hashmap/twoSum"
+                },
+            ]
+    }
+    ,
+    {
         id: 1,
         name: "Hare and Tortoise",
         description: "Floyd's cycle detection algorithm using two pointers moving at different speeds",
