@@ -141,6 +141,13 @@ export const algorithms: Algorithm[] = [
                 description: "Breadth First Search in a graph",
                 Link: "/BFS/bfsGraph"
 
+            },
+            {
+                id: "bfs3",
+                name: "Rotten Oranges",
+                difficulty: "Hard",
+                description: "Min time to rot all oranges",
+                Link: "/BFS/rottenOranges"
             }
 
         ]
