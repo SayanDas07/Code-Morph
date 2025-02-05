@@ -141,8 +141,31 @@ export const algorithms: Algorithm[] = [
                 description: "Breadth First Search in a graph",
                 Link: "/BFS/bfsGraph"
 
+            },
+            {
+                id: "bfs3",
+                name: "Rotten Oranges",
+                difficulty: "Hard",
+                description: "Min time to rot all oranges",
+                Link: "/BFS/rottenOranges"
             }
 
         ]
-    }
+    },
+    {
+        id: 6,
+        name: "Binary Search",
+        description: "Binary search is a search algorithm that finds the position of a target value within a sorted array",
+        category: "Array",
+        problems: [
+            {
+                id: "bs1",
+                name: "Binary Search",
+                difficulty: "Easy",
+                description: "Find an element in a sorted array",
+                Link: "/BS/search"
+            }
+        ]
+    },
+
 ];
