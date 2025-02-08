@@ -1,7 +1,9 @@
-import { SignUp } from "@clerk/nextjs";
-import Link from "next/link";
 
-export default function Page() {
+import { SignUp } from "@clerk/nextjs";
+
+export default function SignUpPage() {
+ 
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-blue-900 flex justify-center items-center">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
@@ -12,24 +14,8 @@ export default function Page() {
           path="/sign-up"
           routing="path"
           signInUrl="/sign-in"
-          redirectUrl="/home"
-          appearance={{
-            variables: {
-              colorPrimary: "#4f83cc", // Primary color for buttons
-              colorBackground: "#ffffff", // Background color
-              colorText: "#333333", // Text color
-              fontFamily: "Arial, sans-serif", // Custom font
-            },
-          }}
+          redirectUrl="/continue"
         />
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-500">
-            Already have an account?{" "}
-            <Link href="/sign-in" className="text-blue-500 hover:underline">
-              Sign In
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );
