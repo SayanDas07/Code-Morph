@@ -12,7 +12,6 @@
 
 .env
 
-package-lock.json
 # testing
 /coverage
 
