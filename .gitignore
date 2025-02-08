@@ -11,6 +11,8 @@
 !.yarn/versions
 
 .env
+
+package-lock.json
 # testing
 /coverage
 
