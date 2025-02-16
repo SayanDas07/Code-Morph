@@ -35,7 +35,7 @@ export const algorithms: Algorithm[] = [
                     "name": "Two Sum",
                     "difficulty": "Easy",
                     "description": "Given an array of integers and a target, find two numbers that add up to the target.",
-                    "Link": "/hashmap/twoSum"
+                    "Link": "/Hashmap/twosum"
                 },
             ]
     }
