@@ -9,7 +9,7 @@ export const Theory = () => {
             <h2 className="text-2xl font-semibold">Theory: Detecting a Cycle in a Linked List</h2>
 
             <p>
-                The <strong>Floyd's Cycle-Finding Algorithm</strong> (also known as Tortoise and Hare) is an elegant solution
+                The <strong>Floyd&apos;s Cycle-Finding Algorithm</strong> (also known as Tortoise and Hare) is an elegant solution
                 for detecting cycles in a linked list. The algorithm uses two pointers moving at different speeds - if they ever
                 meet, it proves the existence of a cycle.
             </p>
@@ -32,7 +32,7 @@ export const Theory = () => {
 
             <h3 className="text-xl font-semibold">How it Works:</h3>
             <p>
-                If there's a cycle, the fast pointer will eventually catch up to the slow pointer from behind.
+                If there&apos;s a cycle, the fast pointer will eventually catch up to the slow pointer from behind.
                 This is because the fast pointer moves one step closer to the slow pointer in each iteration.
             </p>
 
