@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
@@ -14,15 +15,24 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        // Fetch user with solvedProblems
         const currentUser = await prisma.user.findFirst({
             where: { clerkId: userId },
-            include: { solvedProblems: true }, // ✅ Include solved problems
+            include: {
+                solvedProblems: {
+                    select: {
+                        problemId: true,
+                        problemName: true,
+                        difficulty: true,
+                        solvedAt: true,
+                    }
+
+                }
+
+            }
         });
 
         console.log("currentUser", currentUser);
 
-        // Ensure `solvedProblems` is always an array
         if (currentUser) {
             currentUser.solvedProblems = currentUser.solvedProblems || [];
         }

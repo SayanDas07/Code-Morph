@@ -29,6 +29,7 @@ model SolvedProblem {
   userId    String
   problemId String
   problemName String
+  difficulty  String 
   solvedAt  DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
 

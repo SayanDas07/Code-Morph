@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, ChevronRight, Tag } from 'lucide-react';
+import { BookOpen, ChevronRight, Tag, Loader2 } from 'lucide-react';
 import { Algorithm, Problem } from '@/utils/algorithmData';
 import { Checkbox } from "@/components/ui/checkbox";
 import { useUser } from '@clerk/nextjs';
@@ -15,15 +15,18 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [solvedProblems, setSolvedProblems] = useState<Set<string>>(new Set());
     const [isUpdating, setIsUpdating] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
     const { user } = useUser();
-
     const userId = user?.id;
 
     // Fetch solved problems for this user
     useEffect(() => {
         const fetchSolvedProblems = async () => {
+            if (!userId) return;
+            
+            setIsLoading(true);
             try {
                 const response = await fetch('/api/getSolvedProblems', {
                     method: 'POST',
@@ -36,15 +39,15 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                 setSolvedProblems(new Set(data.solvedProblemIds));
             } catch (error) {
                 console.error('Error fetching solved problems:', error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
-        if (userId) {
-            fetchSolvedProblems();
-        }
+        fetchSolvedProblems();
     }, [userId]);
 
-    const handleProblemSolved = async (problemId: string, problemName: string) => {
+    const handleProblemSolved = async (problemId: string, problemName: string, difficulty: string) => {
         if (isUpdating) return;
         setIsUpdating(problemId);
 
@@ -60,7 +63,8 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                 body: JSON.stringify({
                     userId,
                     problemId,
-                    problemName
+                    problemName,
+                    difficulty
                 }),
             });
 
@@ -80,7 +84,6 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
         }
     };
 
-    // Rest of your existing code remains the same
     const getDifficultyColor = (difficulty: Problem['difficulty']): string => {
         switch (difficulty.toLowerCase()) {
             case 'easy':
@@ -99,6 +102,17 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
             router.push(link);
         }
     };
+
+    if (isLoading) {
+        return (
+            <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 shadow-lg p-6">
+                <div className="flex flex-col items-center justify-center h-40">
+                    <Loader2 className="h-10 w-10 text-blue-400 animate-spin mb-4" />
+                    <p className="text-gray-400">Loading algorithm data...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 
@@ -150,15 +164,19 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                             <div className="flex items-center justify-between">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-4">
-                                        <Checkbox
-                                            checked={solvedProblems.has(problem.id)}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleProblemSolved(problem.id, problem.name);
-                                            }}
-                                            disabled={isUpdating === problem.id}
-                                            className="border-gray-600"
-                                        />
+                                        {isUpdating === problem.id ? (
+                                            <Loader2 className="h-4 w-4 text-blue-400 animate-spin" />
+                                        ) : (
+                                            <Checkbox
+                                                checked={solvedProblems.has(problem.id)}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleProblemSolved(problem.id, problem.name, problem.difficulty);
+                                                }}
+                                                disabled={isUpdating === problem.id}
+                                                className="border-gray-600"
+                                            />
+                                        )}
                                         <h3
                                             className="text-lg font-semibold text-gray-200 group-hover:text-blue-400 transition-colors cursor-pointer"
                                             onClick={() => handleProblemClick(problem.Link)}

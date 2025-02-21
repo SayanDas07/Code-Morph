@@ -12,7 +12,7 @@ export async function POST(req: Request) {
             where: { clerkId: userId },
             include: {
                 solvedProblems: {
-                    select: { problemId: true, problemName: true }
+                    select: { problemId: true, problemName: true, difficulty: true }
                 }
             }
         });

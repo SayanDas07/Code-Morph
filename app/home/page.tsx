@@ -80,8 +80,8 @@ const HomePage: React.FC = () => {
             <main className="flex-1 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-auto">
                 <div className="container mx-auto px-10 py-12 max-w-7xl">
                     <header className="mb-12 text-center">
-                        <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-6 leading-normal">
-                            CodeFlow
+                        <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-6 leading-normal">
+                            Code Morph
                         </h1>
                         <p className="text-gray-400 text-lg max-w-3xl mx-auto leading-relaxed">
                             Explore and understand complex algorithmic concepts through interactive, intuitive visualizations that bring computational thinking to life.
