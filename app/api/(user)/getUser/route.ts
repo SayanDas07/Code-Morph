@@ -26,7 +26,7 @@ export async function POST(req: Request) {
                         solvedAt: true,
                     }
 
-                }
+                },
 
             }
         });

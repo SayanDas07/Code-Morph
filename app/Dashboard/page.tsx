@@ -7,7 +7,11 @@ import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Award, Calendar, Mail, Clock } from "lucide-react";
+import { Loader2, Award, Calendar, Mail, Clock, Pencil, BookOpen } from "lucide-react";
+import { Github, Linkedin, Code2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 interface SolvedProblem {
   problemId: string;
@@ -23,6 +27,9 @@ interface UserData {
   image: string | null;
   createdAt: string;
   solvedProblems: SolvedProblem[];
+  githubLink?: string | null;
+  linkedinLink?: string | null;
+  leetcodeLink?: string | null;
 }
 
 
@@ -72,6 +79,21 @@ const Dashboard: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [totalProblems, setTotalProblems] = useState(300);
+  const [links, setLinks] = useState({
+    githubLink: '',
+    linkedinLink: '',
+    leetcodeLink: ''
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [editMode, setEditMode] = useState({
+    github: false,
+    linkedin: false,
+    leetcode: false
+  });
+
+
+
 
   const [difficultyTotals, setDifficultyTotals] = useState({
     easy: 120,
@@ -102,6 +124,54 @@ const Dashboard: React.FC = () => {
 
     getUser();
   }, [user]);
+
+  useEffect(() => {
+    if (userData) {
+      setLinks({
+        githubLink: userData.githubLink || '',
+        linkedinLink: userData.linkedinLink || '',
+        leetcodeLink: userData.leetcodeLink || ''
+      });
+    }
+  }, [userData]);
+
+  const handleUpdateLinks = async () => {
+    setIsSaving(true);
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/socialLinks', { // Updated endpoint
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user?.id,
+          // Only include links that have values
+          ...(links.githubLink && { githubLink: links.githubLink }),
+          ...(links.linkedinLink && { linkedinLink: links.linkedinLink }),
+          ...(links.leetcodeLink && { leetcodeLink: links.leetcodeLink })
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update links');
+      }
+
+      // Update the userData state with the new links
+      setUserData(prev => prev ? {
+        ...prev,
+        githubLink: data.githubLink,
+        linkedinLink: data.linkedinLink,
+        leetcodeLink: data.leetcodeLink
+      } : null);
+
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to update links');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Helper function to group problems by month
   const groupProblemsByMonth = (problems: SolvedProblem[]) => {
@@ -157,6 +227,19 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 text-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
+      <div className="mb-8 flex items-center justify-center">
+        <Link href="/" className="flex items-center gap-2">
+          <div className="relative w-10 h-10">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg blur-sm"></div>
+            <div className="absolute inset-0 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-700">
+              <BookOpen className="h-5 w-5 text-blue-400" />
+            </div>
+          </div>
+          <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+            Code Morph
+          </span>
+        </Link>
+      </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Profile Card */}
           <Card className="bg-gray-800/50 backdrop-blur-sm border-gray-700 shadow-xl rounded-xl overflow-hidden">
@@ -251,16 +334,18 @@ const Dashboard: React.FC = () => {
           <Card className="bg-gray-800/50 backdrop-blur-sm border-gray-700 shadow-xl rounded-xl col-span-1 lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Award className="h-6 w-6 text-blue-400" />
-                Problem Solving History
+                <Award className="h-6 w-6 text-blue-600" />
+                <h1 className="text-white">Problem Solving History</h1>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="timeline" className="w-full">
-                <TabsList className="grid grid-cols-2 mb-6 bg-gray-700/30">
+                <TabsList className="grid grid-cols-3 mb-6 bg-gray-700/30">
                   <TabsTrigger value="timeline">Timeline</TabsTrigger>
                   <TabsTrigger value="list">Problem List</TabsTrigger>
+                  <TabsTrigger value="social">Social Links</TabsTrigger>
                 </TabsList>
+
 
                 <TabsContent value="timeline" className="m-0">
                   <div className="relative pl-8 border-l border-gray-700 space-y-8">
@@ -278,8 +363,8 @@ const Dashboard: React.FC = () => {
                                 <Badge
                                   variant="outline"
                                   className={`ml-2 ${problem.difficulty === 'Easy' ? 'bg-green-900/30 text-green-300 border-green-700' :
-                                      problem.difficulty === 'Medium' ? 'bg-yellow-900/30 text-yellow-300 border-yellow-700' :
-                                        'bg-red-900/30 text-red-300 border-red-700'
+                                    problem.difficulty === 'Medium' ? 'bg-yellow-900/30 text-yellow-300 border-yellow-700' :
+                                      'bg-red-900/30 text-red-300 border-red-700'
                                     }`}
                                 >
                                   {problem.difficulty}
@@ -314,8 +399,8 @@ const Dashboard: React.FC = () => {
                               <Badge
                                 variant="outline"
                                 className={`${problem.difficulty === 'Easy' ? 'bg-green-900/30 text-green-300 border-green-700' :
-                                    problem.difficulty === 'Medium' ? 'bg-yellow-900/30 text-yellow-300 border-yellow-700' :
-                                      'bg-red-900/30 text-red-300 border-red-700'
+                                  problem.difficulty === 'Medium' ? 'bg-yellow-900/30 text-yellow-300 border-yellow-700' :
+                                    'bg-red-900/30 text-red-300 border-red-700'
                                   }`}
                               >
                                 {problem.difficulty}
@@ -332,6 +417,141 @@ const Dashboard: React.FC = () => {
                         <p className="text-gray-400">No problems solved yet. Start your problem-solving journey!</p>
                       </div>
                     )}
+                  </div>
+                </TabsContent>
+                <TabsContent value="social" className="m-0">
+                  <div className="space-y-6">
+                    <div className="space-y-4">
+                      {/* GitHub */}
+                      <div className="space-y-2">
+                        <label className="text-sm text-gray-400">GitHub Profile</label>
+                        <div className="flex gap-2">
+                          {userData?.githubLink && !editMode.github ? (
+                            <div className="flex-1 flex items-center gap-2 bg-gray-700/20 rounded-md p-2">
+                              <Github className="text-gray-400 h-4 w-4" />
+                              <span className="text-white flex-1 truncate">{userData.githubLink}</span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setEditMode(prev => ({ ...prev, github: true }));
+                                  setLinks(prev => ({ ...prev, githubLink: userData.githubLink || '' }));
+                                }}
+                                className="hover:bg-red-500 space-x-1 bg-white text-red-500"
+                              >
+                                <Pencil className="h-3 w-3" />
+                                
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="relative flex-1">
+                              <Github className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                              <Input
+                                placeholder="https://github.com/username"
+                                className="pl-10 bg-gray-700/20 border-gray-600 text-white"
+                                value={links.githubLink}
+                                onChange={(e) => setLinks(prev => ({ ...prev, githubLink: e.target.value }))}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* LinkedIn */}
+                      <div className="space-y-2">
+                        <label className="text-sm text-gray-400">LinkedIn Profile</label>
+                        <div className="flex gap-2">
+                          {userData?.linkedinLink && !editMode.linkedin ? (
+                            <div className="flex-1 flex items-center gap-2 bg-gray-700/20 rounded-md p-2">
+                              <Linkedin className="text-gray-400 h-4 w-4" />
+                              <span className="text-white flex-1 truncate">{userData.linkedinLink}</span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setEditMode(prev => ({ ...prev, linkedin: true }));
+                                  setLinks(prev => ({ ...prev, linkedinLink: userData.linkedinLink || '' }));
+                                }}
+                                className="hover:bg-red-500 space-x-1 bg-white text-red-500"
+                              >
+                                <Pencil className="h-3 w-3" />
+                                
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="relative flex-1">
+                              <Linkedin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                              <Input
+                                placeholder="https://linkedin.com/in/username"
+                                className="pl-10 bg-gray-700/20 border-gray-600 text-white"
+                                value={links.linkedinLink}
+                                onChange={(e) => setLinks(prev => ({ ...prev, linkedinLink: e.target.value }))}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* LeetCode */}
+                      <div className="space-y-2">
+                        <label className="text-sm text-gray-400">LeetCode Profile</label>
+                        <div className="flex gap-2">
+                          {userData?.leetcodeLink && !editMode.leetcode ? (
+                            <div className="flex-1 flex items-center gap-2 bg-gray-700/20 rounded-md p-2">
+                              <Code2 className="text-gray-400 h-4 w-4" />
+                              <span className="text-white flex-1 truncate">{userData.leetcodeLink}</span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setEditMode(prev => ({ ...prev, leetcode: true }));
+                                  setLinks(prev => ({ ...prev, leetcodeLink: userData.leetcodeLink || '' }));
+                                }}
+                                className="hover:bg-red-500 space-x-1 bg-white text-red-500"
+                              >
+                                <Pencil className="h-3 w-3" />
+                             
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="relative flex-1">
+                              <Code2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                              <Input
+                                placeholder="https://leetcode.com/username"
+                                className="pl-10 bg-gray-700/20 border-gray-600 text-white"
+                                value={links.leetcodeLink}
+                                onChange={(e) => setLinks(prev => ({ ...prev, leetcodeLink: e.target.value }))}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {errorMessage && (
+                      <p className="text-red-400 text-sm">{errorMessage}</p>
+                    )}
+
+                    <Button
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      onClick={() => {
+                        handleUpdateLinks();
+                        setEditMode({ github: false, linkedin: false, leetcode: false });
+                      }}
+                      disabled={isSaving}
+                    >
+                      {isSaving ? (
+                        <div className="flex items-center gap-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>Saving...</span>
+                        </div>
+                      ) : 'Save Links'}
+                    </Button>
+
+                    <div className="text-sm text-gray-400">
+                      
+                      <p>• Make sure to enter complete URLs including https://</p>
+                    </div>
                   </div>
                 </TabsContent>
               </Tabs>
