@@ -9,10 +9,13 @@ import { algorithms } from "@/utils/algorithmData";
 import { SearchSection } from "@/components/homePage/SearchSection";
 import { AlgorithmList } from "@/components/homePage/AlgorithmList";
 
-const UserProfileSection: React.FC = () => {
+
+
+
+const  UserProfileSection: React.FC = () => {
     const { signOut } = useClerk();
     const { user } = useUser();
-
+ 
     const handleSignOut = async () => {
         await signOut();
     };
@@ -51,11 +54,11 @@ const UserProfileSection: React.FC = () => {
                         <span>Sign Out</span>
                     </button>
                     <Link
-                        href="/dashboard"
+                        href="/Dashboard"
                         className="flex-1 flex items-center justify-center space-x-2 px-4 py-2.5 text-sm font-semibold text-gray-300 hover:text-white border-2 border-gray-600 hover:border-gray-500 rounded-lg transition-all duration-300 ease-in-out hover:bg-gray-700"
                     >
                         <Settings className="h-5 w-5" />
-                        <span>Settings</span>
+                        <span>DashBoard</span>
                     </Link>
                 </div>
             </div>
@@ -77,8 +80,8 @@ const HomePage: React.FC = () => {
             <main className="flex-1 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-auto">
                 <div className="container mx-auto px-10 py-12 max-w-7xl">
                     <header className="mb-12 text-center">
-                        <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-6 leading-normal">
-                            Algorithm Visualizer
+                        <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-6 leading-normal">
+                            CodeFlow
                         </h1>
                         <p className="text-gray-400 text-lg max-w-3xl mx-auto leading-relaxed">
                             Explore and understand complex algorithmic concepts through interactive, intuitive visualizations that bring computational thinking to life.

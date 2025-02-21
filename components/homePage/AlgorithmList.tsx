@@ -4,12 +4,14 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Algorithm } from '@/utils/algorithmData';
 import { AlgorithmCard } from './AlgorithmCard';
 
+
 interface AlgorithmListProps {
     initialAlgorithms: Algorithm[];
 }
 
 export function AlgorithmList({ initialAlgorithms }: AlgorithmListProps) {
     const [searchQuery, setSearchQuery] = useState('');
+   
 
     useEffect(() => {
         const handleSearch = (e: CustomEvent) => {
@@ -44,7 +46,7 @@ export function AlgorithmList({ initialAlgorithms }: AlgorithmListProps) {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="space-y-8">
                 {filteredAlgorithms.map((algorithm) => (
-                    <AlgorithmCard key={algorithm.id} algorithm={algorithm} />
+                    <AlgorithmCard key={algorithm.id} algorithm={algorithm}/>
                 ))}
             </div>
         </div>

@@ -13,12 +13,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
-  id        String   @id
-  clerkId   String   @unique
-  firstName String
-  lastName  String?
-  email     String   @unique
-  createdAt DateTime @default(now())
-  image     String?
+  id            String         @id
+  clerkId       String         @unique
+  firstName     String
+  lastName      String?
+  email         String         @unique
+  createdAt     DateTime       @default(now())
+  image         String?
+  solvedProblems SolvedProblem[]
+}
+
+model SolvedProblem {
+  userId    String
+  problemId String
+  problemName String
+  solvedAt  DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@id([userId, problemId])
 }

@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { BookOpen, ChevronRight, Tag } from 'lucide-react';
 import { Algorithm, Problem } from '@/utils/algorithmData';
+import { Checkbox } from "@/components/ui/checkbox";
+import { useUser } from '@clerk/nextjs';
 
 interface AlgorithmCardProps {
     algorithm: Algorithm;
@@ -11,8 +13,74 @@ interface AlgorithmCardProps {
 
 export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [solvedProblems, setSolvedProblems] = useState<Set<string>>(new Set());
+    const [isUpdating, setIsUpdating] = useState<string | null>(null);
     const router = useRouter();
 
+    const { user } = useUser();
+
+    const userId = user?.id;
+
+    // Fetch solved problems for this user
+    useEffect(() => {
+        const fetchSolvedProblems = async () => {
+            try {
+                const response = await fetch('/api/getSolvedProblems', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId }),
+                });
+                const data = await response.json();
+                setSolvedProblems(new Set(data.solvedProblemIds));
+            } catch (error) {
+                console.error('Error fetching solved problems:', error);
+            }
+        };
+
+        if (userId) {
+            fetchSolvedProblems();
+        }
+    }, [userId]);
+
+    const handleProblemSolved = async (problemId: string, problemName: string) => {
+        if (isUpdating) return;
+        setIsUpdating(problemId);
+
+        try {
+            const isSolved = solvedProblems.has(problemId);
+            const endpoint = isSolved ? '/api/unmarkProblemSolved' : '/api/markProblemSolved';
+
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId,
+                    problemId,
+                    problemName
+                }),
+            });
+
+            if (response.ok) {
+                const newSolvedProblems = new Set(solvedProblems);
+                if (isSolved) {
+                    newSolvedProblems.delete(problemId);
+                } else {
+                    newSolvedProblems.add(problemId);
+                }
+                setSolvedProblems(newSolvedProblems);
+            }
+        } catch (error) {
+            console.error('Error updating problem status:', error);
+        } finally {
+            setIsUpdating(null);
+        }
+    };
+
+    // Rest of your existing code remains the same
     const getDifficultyColor = (difficulty: Problem['difficulty']): string => {
         switch (difficulty.toLowerCase()) {
             case 'easy':
@@ -35,7 +103,6 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
     return (
         <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 
                     shadow-lg hover:shadow-blue-900/20 transition-all duration-300">
-            {/* Make the entire header section clickable for expanding */}
             <div
                 className="p-6 border-b border-gray-800 cursor-pointer hover:bg-gray-800/50 transition-all duration-200"
                 onClick={() => setIsExpanded(!isExpanded)}
@@ -52,10 +119,19 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
-                           bg-blue-900/30 text-blue-400 border border-blue-800">
-                            {algorithm.problems.length} Problems
-                        </span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-gray-400">
+                                {Array.from(solvedProblems).filter(id =>
+                                    algorithm.problems.some(p => p.id === id)
+                                ).length}
+                                /
+                                {algorithm.problems.length}
+                            </span>
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                               bg-blue-900/30 text-blue-400 border border-blue-800">
+                                Problems Solved
+                            </span>
+                        </div>
                         <ChevronRight
                             className={`h-5 w-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
                         />
@@ -69,13 +145,24 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                     {algorithm.problems.map((problem) => (
                         <div
                             key={problem.id}
-                            onClick={() => handleProblemClick(problem.leetcodeLink || problem.Link)}
-                            className="p-6 hover:bg-gray-800/50 transition-all duration-200 cursor-pointer group"
+                            className="p-6 hover:bg-gray-800/50 transition-all duration-200 group"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-4">
-                                        <h3 className="text-lg font-semibold text-gray-200 group-hover:text-blue-400 transition-colors">
+                                        <Checkbox
+                                            checked={solvedProblems.has(problem.id)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleProblemSolved(problem.id, problem.name);
+                                            }}
+                                            disabled={isUpdating === problem.id}
+                                            className="border-gray-600"
+                                        />
+                                        <h3
+                                            className="text-lg font-semibold text-gray-200 group-hover:text-blue-400 transition-colors cursor-pointer"
+                                            onClick={() => handleProblemClick(problem.Link)}
+                                        >
                                             {problem.name}
                                         </h3>
                                         <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getDifficultyColor(
