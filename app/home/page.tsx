@@ -235,10 +235,10 @@ const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate checking if all components are loaded
+    
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // Adjust this time as needed
+    }, 2000); 
     
     return () => clearTimeout(timer);
   }, []);
