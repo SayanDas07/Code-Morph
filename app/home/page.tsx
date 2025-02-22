@@ -138,10 +138,12 @@ const UserProfileSection: React.FC = () => {
             {displayUsername}
           </p>
           {userDetails.solvedProblems && (
-            <div className="mt-3 inline-flex items-center px-3 py-1 space-x-2 bg-green-500/20 rounded-full text-green-400 border border-green-500/30">
+            <Link href="/Dashboard" legacyBehavior>
+            <a className="mt-3 inline-flex items-center px-3 py-1 space-x-2 bg-green-500/20 rounded-full text-green-400 border border-green-500/30 hover:bg-green-500/30 transition">
               <Award className="w-4 h-4" />
               <span className="text-sm font-medium">{userDetails.solvedProblems.length} Problems Solved</span>
-            </div>
+            </a>
+          </Link>
           )}
         </div>
 
