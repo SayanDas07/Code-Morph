@@ -25,7 +25,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
     useEffect(() => {
         const fetchSolvedProblems = async () => {
             if (!userId) return;
-            
+
             setIsLoading(true);
             try {
                 const response = await fetch('/api/getSolvedProblems', {
@@ -47,7 +47,8 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
         fetchSolvedProblems();
     }, [userId]);
 
-    const handleProblemSolved = async (problemId: string, problemName: string, difficulty: string) => {
+    const handleProblemSolved = async (e: React.MouseEvent, problemId: string, problemName: string, difficulty: string) => {
+        e.stopPropagation(); // Prevent triggering the parent div's click
         if (isUpdating) return;
         setIsUpdating(problemId);
 
@@ -159,7 +160,8 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                     {algorithm.problems.map((problem) => (
                         <div
                             key={problem.id}
-                            className="p-6 hover:bg-gray-800/50 transition-all duration-200 group"
+                            className="p-6 hover:bg-gray-800/50 transition-all duration-200 group cursor-pointer"
+                            onClick={() => handleProblemClick(problem.Link)}
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex-1">
@@ -167,20 +169,15 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                                         {isUpdating === problem.id ? (
                                             <Loader2 className="h-4 w-4 text-blue-400 animate-spin" />
                                         ) : (
-                                            <Checkbox
-                                                checked={solvedProblems.has(problem.id)}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleProblemSolved(problem.id, problem.name, problem.difficulty);
-                                                }}
-                                                disabled={isUpdating === problem.id}
-                                                className="border-gray-600"
-                                            />
+                                            <div onClick={(e) => handleProblemSolved(e, problem.id, problem.name, problem.difficulty)}>
+                                                <Checkbox
+                                                    checked={solvedProblems.has(problem.id)}
+                                                    className="border-gray-600"
+                                                    disabled={isUpdating === problem.id}
+                                                />
+                                            </div>
                                         )}
-                                        <h3
-                                            className="text-lg font-semibold text-gray-200 group-hover:text-blue-400 transition-colors cursor-pointer"
-                                            onClick={() => handleProblemClick(problem.Link)}
-                                        >
+                                        <h3 className="text-lg font-semibold text-gray-200 group-hover:text-blue-400 transition-colors">
                                             {problem.name}
                                         </h3>
                                         <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getDifficultyColor(

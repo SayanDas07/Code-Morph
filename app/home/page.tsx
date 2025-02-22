@@ -37,7 +37,7 @@ const UserProfileSection: React.FC = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (!user?.id) return;
-      
+
       try {
         setLoading(true);
         const response = await fetch('/api/getUser', {
@@ -72,7 +72,7 @@ const UserProfileSection: React.FC = () => {
   };
 
   if (!user) return null;
-  
+
   if (loading) {
     return (
       <div className="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 shadow-xl flex justify-center items-center h-64">
@@ -86,7 +86,7 @@ const UserProfileSection: React.FC = () => {
       <div className="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
         <div className="text-center text-red-400">
           <p>{error || "User profile not found"}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="mt-4 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all duration-300"
           >
@@ -118,11 +118,13 @@ const UserProfileSection: React.FC = () => {
       <div className="flex flex-col items-center space-y-6">
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-md opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <img
-            src={displayImage}
-            alt={fullName || "User Profile"}
-            className="relative w-32 h-32 rounded-full object-cover border-4 border-gray-700 shadow-lg transition-transform duration-300 group-hover:scale-105"
-          />
+          <Link href="/Dashboard">
+            <img
+              src={displayImage}
+              alt={fullName || "User Profile"}
+              className="relative w-32 h-32 rounded-full object-cover border-4 border-gray-700 shadow-lg transition-transform duration-300 group-hover:scale-105"
+            />
+          </Link>
           <div className="absolute bottom-1 right-1 bg-gradient-to-r from-blue-500 to-purple-600 p-1.5 rounded-full shadow-lg">
             <User className="w-5 h-5 text-white" />
           </div>
@@ -142,16 +144,16 @@ const UserProfileSection: React.FC = () => {
             </div>
           )}
         </div>
-        
+
         {hasSocialLinks && (
           <div className="w-full space-y-3 bg-gray-900/80 p-5 rounded-xl border border-gray-700/50 backdrop-blur-sm">
             <h3 className="text-md font-medium text-blue-400 border-b border-gray-700 pb-2 mb-3 flex items-center gap-2">
               <Globe className="w-4 h-4" />
               <span>Social Links</span>
             </h3>
-            
+
             {userDetails.githubLink && (
-              <a 
+              <a
                 href={userDetails.githubLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -161,9 +163,9 @@ const UserProfileSection: React.FC = () => {
                 <span className="truncate">{formatLink(userDetails.githubLink)}</span>
               </a>
             )}
-            
+
             {userDetails.linkedinLink && (
-              <a 
+              <a
                 href={userDetails.linkedinLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -173,9 +175,9 @@ const UserProfileSection: React.FC = () => {
                 <span className="truncate">{formatLink(userDetails.linkedinLink)}</span>
               </a>
             )}
-            
+
             {userDetails.leetcodeLink && (
-              <a 
+              <a
                 href={userDetails.leetcodeLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -232,7 +234,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-gray-950 text-gray-100 bg-[url('/assets/grid-pattern.svg')] bg-fixed">
       {/* Sidebar */}
-      <aside className="w-96 bg-gray-900/80 backdrop-blur-md shadow-2xl relative z-10 border-r border-gray-800/50">
+      <aside className="w-max-auto bg-gray-900/80 backdrop-blur-md shadow-2xl relative z-10 border-r border-gray-800/50">
         <div className="p-6 h-full flex flex-col">
           <div className="mb-8 flex items-center justify-center">
             <Link href="/" className="flex items-center gap-2">
@@ -247,21 +249,21 @@ const HomePage: React.FC = () => {
               </span>
             </Link>
           </div>
-          
+
           <UserProfileSection />
-         
-          
-          
+
+
+
         </div>
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 bg-gradient-to-br from-gray-900 via-gray-900 to-gray-900 overflow-auto">
         <div className="container mx-auto px-8 py-12 max-w-7xl relative z-0">
-        
-          
 
-        
+
+
+
 
           <div className="space-y-10">
             <SearchSection />
