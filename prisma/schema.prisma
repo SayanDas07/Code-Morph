@@ -13,6 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Badge {
+  NONE
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
 model User {
   id             String          @id
   clerkId        String          @unique
@@ -25,6 +33,7 @@ model User {
   linkedinLink   String?
   leetcodeLink   String?
   solvedProblems SolvedProblem[]
+  activeBadge    Badge           @default(NONE)
 }
 
 model SolvedProblem {

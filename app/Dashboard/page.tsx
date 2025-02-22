@@ -7,11 +7,13 @@ import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Award, Calendar, Mail, Clock, Pencil, BookOpen } from "lucide-react";
+import { Loader2, Award, Calendar, Mail, Clock, Pencil, BookOpen, Flame } from "lucide-react";
 import { Github, Linkedin, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import ActiveDaysDisplay from "@/components/ActiveDaysDisplay";
+import BadgeStatus from "@/components/BadgeStatus";
 
 interface SolvedProblem {
   problemId: string;
@@ -31,6 +33,12 @@ interface UserData {
   linkedinLink?: string | null;
   leetcodeLink?: string | null;
 }
+
+interface ActiveDaysData {
+  activeDays: number;
+  activeDates: string[];
+}
+
 
 
 const ProgressCircle = ({ value, maxValue, color, size = 120 }: { value: number; maxValue: number; color: string; size?: number }) => {
@@ -100,6 +108,64 @@ const Dashboard: React.FC = () => {
     medium: 120,
     hard: 60
   });
+
+  const [activeData, setActiveData] = useState<ActiveDaysData | null>(null);
+
+  const [badgeData, setBadgeData] = useState(null);
+
+ 
+
+  useEffect(() => {
+    if (!user?.id || !activeData?.activeDays) return;
+
+    const updateBadge = async () => {
+      try {
+        const response = await fetch('/api/badge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.id,
+            activeDays: activeData.activeDays
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setBadgeData(data);
+        }
+      } catch (error) {
+        console.error('Error updating badge:', error);
+      }
+    };
+
+    updateBadge();
+  }, [user?.id, activeData?.activeDays]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const getActiveDays = async () => {
+      try {
+
+        const res = await fetch("/api/activity", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: user.id }),
+        });
+
+        console.log(res);
+
+        if (res.ok) {
+          const data = await res.json();
+          setActiveData(data);
+        }
+      } catch (error) {
+        console.error("Error fetching active days:", error);
+      }
+    };
+
+    getActiveDays();
+  }, [user?.id]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -227,19 +293,19 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 text-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
-      <div className="mb-8 flex items-center justify-center">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="relative w-10 h-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg blur-sm"></div>
-            <div className="absolute inset-0 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-700">
-              <BookOpen className="h-5 w-5 text-blue-400" />
+        <div className="mb-8 flex items-center justify-center">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative w-10 h-10">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg blur-sm"></div>
+              <div className="absolute inset-0 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-700">
+                <BookOpen className="h-5 w-5 text-blue-400" />
+              </div>
             </div>
-          </div>
-          <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-            Code Morph
-          </span>
-        </Link>
-      </div>
+            <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+              Code Morph
+            </span>
+          </Link>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Profile Card */}
           <Card className="bg-gray-800/50 backdrop-blur-sm border-gray-700 shadow-xl rounded-xl overflow-hidden">
@@ -266,9 +332,26 @@ const Dashboard: React.FC = () => {
                 <span>Joined {memberSince}</span>
               </div>
 
-              <div className="flex items-center mt-2 text-sm text-gray-400">
-                <Clock className="h-4 w-4 mr-2" />
-                <span>{daysAsMember} days as member</span>
+              <div className="mt-4">
+                {badgeData && (
+                  <BadgeStatus
+                    badgeData={badgeData}
+                    isLoading={isLoading}
+                  />
+                )}
+              </div>
+
+
+
+
+              <div className="mt-6 px-6">
+                <ActiveDaysDisplay
+                  activeDays={activeData?.activeDays ?? 0}
+                  activeDates={activeData?.activeDates ?? []}
+                />
+
+
+
               </div>
 
               {/* Overall Progress Circle */}
@@ -281,12 +364,14 @@ const Dashboard: React.FC = () => {
                 />
               </div>
 
+
               <div className="text-center mt-2">
                 <p className="text-sm text-gray-400">Total Progress</p>
                 <p className="text-xs text-gray-500 mt-1">
                   {((userData.solvedProblems.length / totalProblems) * 100).toFixed(1)}% completed
                 </p>
               </div>
+
 
               {/* Difficulty Breakdown */}
               <div className="mt-6">
@@ -440,7 +525,7 @@ const Dashboard: React.FC = () => {
                                 className="hover:bg-red-500 space-x-1 bg-white text-red-500"
                               >
                                 <Pencil className="h-3 w-3" />
-                                
+
                               </Button>
                             </div>
                           ) : (
@@ -475,7 +560,7 @@ const Dashboard: React.FC = () => {
                                 className="hover:bg-red-500 space-x-1 bg-white text-red-500"
                               >
                                 <Pencil className="h-3 w-3" />
-                                
+
                               </Button>
                             </div>
                           ) : (
@@ -510,7 +595,7 @@ const Dashboard: React.FC = () => {
                                 className="hover:bg-red-500 space-x-1 bg-white text-red-500"
                               >
                                 <Pencil className="h-3 w-3" />
-                             
+
                               </Button>
                             </div>
                           ) : (
@@ -549,7 +634,7 @@ const Dashboard: React.FC = () => {
                     </Button>
 
                     <div className="text-sm text-gray-400">
-                      
+
                       <p>• Make sure to enter complete URLs including https://</p>
                     </div>
                   </div>
