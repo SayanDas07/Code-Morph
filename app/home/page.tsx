@@ -8,6 +8,7 @@ import { LogOut, User, Settings, Github, Linkedin, Code, BookOpen, Award } from 
 import { algorithms } from "@/utils/algorithmData";
 import { SearchSection } from "@/components/homePage/SearchSection";
 import { AlgorithmList } from "@/components/homePage/AlgorithmList";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface UserDetails {
   id: string;
@@ -231,6 +232,21 @@ const Globe: React.FC<{ className: string }> = ({ className }) => (
 
 
 const HomePage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); 
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-950 text-gray-100 bg-[url('/assets/grid-pattern.svg')] bg-fixed">
       {/* Sidebar */}
