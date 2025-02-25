@@ -77,7 +77,11 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                     newSolvedProblems.add(problemId);
                 }
                 setSolvedProblems(newSolvedProblems);
+
+                console.log(`Problem ${isSolved ? 'unmarked' : 'marked'} as solved:`, problemName);
             }
+
+        
         } catch (error) {
             console.error('Error updating problem status:', error);
         } finally {

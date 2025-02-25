@@ -43,10 +43,7 @@ export async function POST(req: Request) {
   
     const activeDaysCount = activeDaysSet.size;
 
-    console.log("[ACTIVE_DAYS]", {
-      activeDays: activeDaysCount,  
-        activeDates: Array.from(activeDaysSet).sort(),
-    });
+  
 
     return NextResponse.json({
       activeDays: activeDaysCount,
@@ -57,5 +54,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("[ACTIVE_DAYS]", error);
     return new NextResponse("Internal Error", { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }

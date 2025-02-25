@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
     try {
-        const { userId, problemId, problemName, difficulty    } = await req.json();
+        const { userId, problemId, problemName, difficulty } = await req.json();
 
         const user = await prisma.user.findFirst({
             where: { clerkId: userId }
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
             }
         });
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({ success: true, status: 200, message: "Problem marked as solved" });
     } catch (error: any) {
         // If problem is already marked as solved, just return success
         if (error.code === 'P2002') {

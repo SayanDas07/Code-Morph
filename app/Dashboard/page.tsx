@@ -153,7 +153,7 @@ const Dashboard: React.FC = () => {
           body: JSON.stringify({ userId: user.id }),
         });
 
-        console.log(res);
+       
 
         if (res.ok) {
           const data = await res.json();
@@ -206,7 +206,7 @@ const Dashboard: React.FC = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('/api/socialLinks', { // Updated endpoint
+      const response = await fetch('/api/socialLinks', { 
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -219,8 +219,10 @@ const Dashboard: React.FC = () => {
       });
 
       const data = await response.json();
+      console.log(data.message);
 
       if (!response.ok) {
+
         throw new Error(data.error || 'Failed to update links');
       }
 

@@ -67,7 +67,7 @@ export default async function Home() {
                     <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <Link
-                    href="/demo"
+                    href="/BS/search"
                     className="px-8 py-4 rounded-lg border-2 border-cyan-400/50 hover:border-cyan-400 text-cyan-400 transition-colors flex items-center gap-2"
                   >
                     Try Demo
@@ -79,7 +79,7 @@ export default async function Home() {
 
             {/* How to Use CodeFlow Section */}
             <div className="container mx-auto px-6">
-              <h2 className="text-3xl font-bold text-center mb-12">How to Use CodeFlow</h2>
+              <h2 className="text-3xl font-bold text-center mb-12">How to Use CodeMorph</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 shadow-lg">
                   <div className="flex items-center gap-4 mb-4">

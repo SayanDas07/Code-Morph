@@ -59,7 +59,6 @@ interface BadgeStatusProps {
 
 const BadgeStatus: React.FC<BadgeStatusProps> = ({ badgeData, isLoading }) => {
 
-  console.log("Badge Data:", badgeData);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-4">
