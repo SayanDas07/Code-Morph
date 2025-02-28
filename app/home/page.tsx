@@ -5,10 +5,10 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { LogOut, User, Settings, Github, Linkedin, Code, BookOpen, Award } from "lucide-react";
-import { algorithms } from "@/utils/algorithmData";
+import LoadingScreen from "@/components/LoadingScreen";
 import { SearchSection } from "@/components/homePage/SearchSection";
 import { AlgorithmList } from "@/components/homePage/AlgorithmList";
-import LoadingScreen from "@/components/LoadingScreen";
+import { algorithms } from "@/utils/algorithmData";
 
 interface UserDetails {
   id: string;
@@ -33,6 +33,7 @@ const UserProfileSection: React.FC = () => {
   const { user } = useUser();
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [signingOut, setSigningOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -69,8 +70,21 @@ const UserProfileSection: React.FC = () => {
   }, [user]);
 
   const handleSignOut = async () => {
-    await signOut();
+    try {
+      setSigningOut(true);
+      // Wait briefly to show loading animation
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+      setSigningOut(false);
+    }
   };
+
+  // Show full-screen loading when signing out
+  if (signingOut) {
+    return <LoadingScreen customMessage="Signing you out securely..." />;
+  }
 
   if (!user) return null;
 
@@ -194,7 +208,8 @@ const UserProfileSection: React.FC = () => {
         <div className="flex space-x-4 w-full">
           <button
             onClick={handleSignOut}
-            className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 text-sm font-semibold text-red-400 hover:text-white border-2 border-red-500/50 hover:border-red-500 rounded-xl transition-all duration-300 ease-in-out hover:bg-red-500/20 backdrop-blur-sm"
+            disabled={signingOut}
+            className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 text-sm font-semibold text-red-400 hover:text-white border-2 border-red-500/50 hover:border-red-500 rounded-xl transition-all duration-300 ease-in-out hover:bg-red-500/20 backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <LogOut className="h-5 w-5" />
             <span>Sign Out</span>
@@ -230,16 +245,15 @@ const Globe: React.FC<{ className: string }> = ({ className }) => (
   </svg>
 );
 
-
 const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    
+
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); 
-    
+    }, 2000);
+
     return () => clearTimeout(timer);
   }, []);
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BookOpen } from 'lucide-react';
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ customMessage = "Please wait while we load your experience..." }) => {
   return (
     <div className="fixed inset-0 bg-gray-950 flex items-center justify-center z-50">
       <div className="flex flex-col items-center space-y-6">
@@ -21,7 +21,7 @@ const LoadingScreen = () => {
             <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
             <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
           </div>
-          <p className="text-gray-400 text-sm">Please wait while we load your experience...</p>
+          <p className="text-gray-400 text-sm">{customMessage}</p>
         </div>
       </div>
     </div>
