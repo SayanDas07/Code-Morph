@@ -173,10 +173,7 @@ const MaxSubArrayAnimation: React.FC<MaxSubArrayAnimationProps> = ({
                 </motion.div>
             )}
 
-            <div className="mt-6 border-t pt-4 text-sm">
-                <h3 className="font-semibold mb-2">Algorithm Explanation:</h3>
-
-            </div>
+           
         </div>
     );
 };

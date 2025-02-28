@@ -1,7 +1,7 @@
 import React from 'react';
 import { BookOpen } from 'lucide-react';
 
-const LoadingScreen = ({ customMessage = "Please wait while we load your experience..." }) => {
+const LoadingScreen = ({ customMessage = "Please wait while we load your experience and open in dekstop for better visulization experience..." }) => {
   return (
     <div className="fixed inset-0 bg-gray-950 flex items-center justify-center z-50">
       <div className="flex flex-col items-center space-y-6">
