@@ -201,7 +201,7 @@ export const algorithms: Algorithm[] = [
                 name: "Maximum Subarray Sum",
                 difficulty: "Medium",
                 description: "Find the maximum sum of a subarray",
-                Link: "/kadanesAlgo"
+                Link: "/KadanesAlgo"
 
             }
         ]
