@@ -154,12 +154,11 @@ export default async function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900/90 backdrop-blur-sm py-8 mt-5">
+      <footer className="bg-slate-900/90 backdrop-blur-sm py-8 mt-7">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-center space-x-2 text-gray-300">
-            <span>Made with</span>
+            <span>Made by</span>
 
-            <span>by</span>
             <Link href="https://github.com/Ironsoldier353" className="text-blue-400 hover:text-blue-300 transition-colors font-medium mx-1">
               Jeet Sarkar
             </Link>
