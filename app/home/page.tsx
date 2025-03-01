@@ -81,11 +81,6 @@ const UserProfileSection: React.FC = () => {
     }
   };
 
-  // Show full-screen loading when signing out
-  if (signingOut) {
-    return <LoadingScreen customMessage="Signing you out securely..." />;
-  }
-
   if (!user) return null;
 
   if (loading) {
@@ -130,6 +125,13 @@ const UserProfileSection: React.FC = () => {
 
   return (
     <div className="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/50">
+      {signingOut && (
+        <div className="mb-6 p-3 bg-gray-900/80 rounded-xl flex items-center justify-center space-x-3">
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-400 border-t-2 border-t-transparent"></div>
+          <span className="text-blue-400 text-sm font-medium">Signing you out securely...</span>
+        </div>
+      )}
+
       <div className="flex flex-col items-center space-y-6">
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-md opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
