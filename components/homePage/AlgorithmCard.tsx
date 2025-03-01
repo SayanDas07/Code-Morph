@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, ChevronRight, Tag, Loader2 } from 'lucide-react';
+import { BookOpen, ChevronRight, Tag, Loader2, CheckCircle, Circle } from 'lucide-react';
 import { Algorithm, Problem } from '@/utils/algorithmData';
-import { Checkbox } from "@/components/ui/checkbox";
 import { useUser } from '@clerk/nextjs';
 
 interface AlgorithmCardProps {
@@ -21,7 +20,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
     const { user } = useUser();
     const userId = user?.id;
 
-    // Fetch solved problems for this user
+
     useEffect(() => {
         const fetchSolvedProblems = async () => {
             if (!userId) return;
@@ -48,7 +47,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
     }, [userId]);
 
     const handleProblemSolved = async (e: React.MouseEvent, problemId: string, problemName: string, difficulty: string) => {
-        e.stopPropagation(); // Prevent triggering the parent div's click
+        e.stopPropagation(); 
         if (isUpdating) return;
         setIsUpdating(problemId);
 
@@ -81,7 +80,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                 console.log(`Problem ${isSolved ? 'unmarked' : 'marked'} as solved:`, problemName);
             }
 
-        
+
         } catch (error) {
             console.error('Error updating problem status:', error);
         } finally {
@@ -161,39 +160,74 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
 
             {isExpanded && (
                 <div className="divide-y divide-gray-800">
+                   
+                    <div className="px-6 py-3 bg-gray-800/70">
+                        <div className="grid grid-cols-12 gap-4">
+                            <div className="col-span-1 font-medium text-gray-300">Status</div>
+                            <div className="col-span-5 font-medium text-gray-300">Problem</div>
+                            <div className="col-span-2 font-medium text-gray-300">Difficulty</div>
+                            <div className="col-span-4 font-medium text-gray-300">Description</div>
+                        </div>
+                    </div>
+
                     {algorithm.problems.map((problem) => (
                         <div
                             key={problem.id}
-                            className="p-6 hover:bg-gray-800/50 transition-all duration-200 group cursor-pointer"
+                            className="p-6 hover:bg-gray-800/50 transition-all duration-200 group cursor-pointer relative"
                             onClick={() => handleProblemClick(problem.Link)}
                         >
-                            <div className="flex items-center justify-between">
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-4">
-                                        {isUpdating === problem.id ? (
-                                            <Loader2 className="h-4 w-4 text-blue-400 animate-spin" />
-                                        ) : (
-                                            <div onClick={(e) => handleProblemSolved(e, problem.id, problem.name, problem.difficulty)}>
-                                                <Checkbox
-                                                    checked={solvedProblems.has(problem.id)}
-                                                    className="border-gray-600"
-                                                    disabled={isUpdating === problem.id}
-                                                />
-                                            </div>
-                                        )}
-                                        <h3 className="text-lg font-semibold text-gray-200 group-hover:text-blue-400 transition-colors">
-                                            {problem.name}
-                                        </h3>
-                                        <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getDifficultyColor(
-                                            problem.difficulty
-                                        )}`}>
-                                            {problem.difficulty}
-                                        </span>
-                                    </div>
-                                    <p className="mt-2 text-gray-400">{problem.description}</p>
+                            <div className="grid grid-cols-12 gap-4 items-center">
+                                
+                                <div className="col-span-1">
+                                    {isUpdating === problem.id ? (
+                                        <Loader2 className="h-5 w-5 text-blue-400 animate-spin" />
+                                    ) : (
+                                        <div
+                                            onClick={(e) => handleProblemSolved(e, problem.id, problem.name, problem.difficulty)}
+                                            className="flex items-center justify-center cursor-pointer hover:bg-gray-700/50 p-2 rounded-md"
+                                            title={solvedProblems.has(problem.id) ? "Mark as unsolved" : "Mark as solved"}
+                                        >
+                                            {solvedProblems.has(problem.id) ? (
+                                                <CheckCircle className="h-5 w-5 text-green-400" />
+                                            ) : (
+                                                <Circle className="h-5 w-5 text-gray-400" />
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
-                                <ChevronRight className="h-5 w-5 text-gray-600 group-hover:text-blue-400 
-                                     group-hover:transform group-hover:translate-x-1 transition-all" />
+
+                         
+                                <div className="col-span-5">
+                                    <h3 className="text-lg font-semibold text-gray-200 group-hover:text-blue-400 transition-colors">
+                                        {problem.name}
+                                    </h3>
+                                </div>
+
+                              
+                                <div className="col-span-2">
+                                    <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getDifficultyColor(
+                                        problem.difficulty
+                                    )}`}>
+                                        {problem.difficulty}
+                                    </span>
+                                </div>
+
+                                
+                                <div className="col-span-4 flex items-center justify-between group/desc relative">
+                                    <div className="overflow-hidden w-full">
+                                        <p className="text-gray-400 truncate pr-6">{problem.description}</p>
+
+                                        
+                                        <div className="absolute left-0 top-0 transform -translate-y-full mt-2 p-3 
+                                            bg-gray-800 rounded-md shadow-lg z-50 w-full max-w-md border border-gray-700
+                                            invisible group-hover/desc:visible opacity-0 group-hover/desc:opacity-100 
+                                            transition-all duration-200 pointer-events-none">
+                                            <p className="text-gray-300">{problem.description}</p>
+                                        </div>
+                                    </div>
+                                    <ChevronRight className="h-5 w-5 text-gray-600 group-hover:text-blue-400 
+                                        group-hover:transform group-hover:translate-x-1 transition-all absolute right-0" />
+                                </div>
                             </div>
                         </div>
                     ))}
