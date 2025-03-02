@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Code, Brain, TrendingUp } from "lucide-react";
 import MaxSubArrayAnimation from "@/components/KadaneAlgo/subArraySum";
 
-const SlidingWindowPage = () => {
+const kadanesAlgoPage = () => {
 
   const contentSections = [
     {
@@ -143,4 +143,4 @@ const SlidingWindowPage = () => {
   );
 };
 
-export default SlidingWindowPage;
+export default kadanesAlgoPage;

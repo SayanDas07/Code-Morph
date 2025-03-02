@@ -206,5 +206,21 @@ export const algorithms: Algorithm[] = [
             }
         ]
     },
+    {
+        id: 8,
+        name: "Dutch National Flag",
+        description: "Dutch National Flag algorithm is used to sort an array of 0s, 1s, and 2s in linear time complexity",
+        category: "Array",
+        problems: [
+            {
+                id: "dnf1",
+                name: "Sort 0s, 1s, 2s",
+                difficulty: "Medium",
+                description: "Sort an array of 0s, 1s, and 2s",
+                Link: "/DutchNationalFlag"
+
+            }
+        ]
+    },
 
 ];
