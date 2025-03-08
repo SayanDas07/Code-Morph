@@ -222,5 +222,21 @@ export const algorithms: Algorithm[] = [
             }
         ]
     },
+    {
+        id: 9,
+        name: "Moore's Voting Algorithm",
+        description: "Moore's Voting Algorithm is used to find the majority element in an array",
+        category: "Array",
+        problems: [
+            {
+                id: "moore1",
+                name: "Majority Element more than N/2",
+                difficulty: "Medium",
+                description: "Find the majority element in an array where the majority element appears more than n/2 times",
+                Link: "/MooresVotingAlgorithm"
+
+            }
+        ]
+    },
 
 ];
