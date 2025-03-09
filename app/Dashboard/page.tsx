@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import ActiveDaysDisplay from "@/components/ActiveDaysDisplay";
 import BadgeStatus from "@/components/BadgeStatus";
+import { getProblemsByDifficulty, getTotalProblemsCount } from "@/utils/noOfProb";
 
 interface SolvedProblem {
   problemId: string;
@@ -86,7 +87,6 @@ const Dashboard: React.FC = () => {
   const { user } = useUser();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [totalProblems, setTotalProblems] = useState(300);
   const [links, setLinks] = useState({
     githubLink: '',
     linkedinLink: '',
@@ -102,18 +102,14 @@ const Dashboard: React.FC = () => {
 
 
 
-
-  const [difficultyTotals, setDifficultyTotals] = useState({
-    easy: 120,
-    medium: 120,
-    hard: 60
-  });
-
   const [activeData, setActiveData] = useState<ActiveDaysData | null>(null);
 
   const [badgeData, setBadgeData] = useState(null);
 
- 
+  const totalProblems = getTotalProblemsCount();
+  const problemsByDifficulty = getProblemsByDifficulty();
+
+
 
   useEffect(() => {
     if (!user?.id || !activeData?.activeDays) return;
@@ -153,7 +149,7 @@ const Dashboard: React.FC = () => {
           body: JSON.stringify({ userId: user.id }),
         });
 
-       
+
 
         if (res.ok) {
           const data = await res.json();
@@ -206,7 +202,7 @@ const Dashboard: React.FC = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('/api/socialLinks', { 
+      const response = await fetch('/api/socialLinks', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -382,7 +378,7 @@ const Dashboard: React.FC = () => {
                   <div className="flex justify-center">
                     <ProgressCircle
                       value={difficultyStats.easy}
-                      maxValue={difficultyTotals.easy}
+                      maxValue={problemsByDifficulty.Easy}
                       color="#4ade80"
                       size={80}
                     />
@@ -390,7 +386,7 @@ const Dashboard: React.FC = () => {
                   <div className="flex justify-center">
                     <ProgressCircle
                       value={difficultyStats.medium}
-                      maxValue={difficultyTotals.medium}
+                      maxValue={problemsByDifficulty.Medium}
                       color="#facc15"
                       size={80}
                     />
@@ -398,7 +394,7 @@ const Dashboard: React.FC = () => {
                   <div className="flex justify-center">
                     <ProgressCircle
                       value={difficultyStats.hard}
-                      maxValue={difficultyTotals.hard}
+                      maxValue={problemsByDifficulty.Hard}
                       color="#f87171"
                       size={80}
                     />
