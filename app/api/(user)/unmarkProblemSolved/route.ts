@@ -29,7 +29,7 @@ export async function POST(req: Request) {
             }
         });
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({ success: true, status: 200, message: "Problem unmarked as solved" });
     } catch (error: any) {
         console.error("Error unmarking problem as solved:", error.message);
         return NextResponse.json(

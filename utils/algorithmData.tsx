@@ -23,21 +23,21 @@ export const algorithms: Algorithm[] = [
         "description": "A data structure that stores key-value pairs for fast lookups, insertion, and deletion operations.",
         "category": "Data Structures",
         "problems": [
-                {
-                    "id": "hm1",
-                    "name": "Frequency of elements",
-                    "difficulty": "Easy",
-                    "description": "Given an array of integers. Count the frequency of each elements.",
-                    "Link": "/Hashmap/frequencymap"
-                },
-                {
-                    "id": "hm2",
-                    "name": "Two Sum",
-                    "difficulty": "Easy",
-                    "description": "Given an array of integers and a target, find two numbers that add up to the target.",
-                    "Link": "/Hashmap/twosum"
-                },
-            ]
+            {
+                "id": "hm1",
+                "name": "Frequency of elements",
+                "difficulty": "Easy",
+                "description": "Given an array of integers. Count the frequency of each elements.",
+                "Link": "/Hashmap/frequencymap"
+            },
+            {
+                "id": "hm2",
+                "name": "Two Sum",
+                "difficulty": "Easy",
+                "description": "Given an array of integers and a target, find two numbers that add up to the target.",
+                "Link": "/Hashmap/twosum"
+            },
+        ]
     }
     ,
     {
@@ -187,6 +187,54 @@ export const algorithms: Algorithm[] = [
                 difficulty: "Easy",
                 description: "Find an element in a sorted array",
                 Link: "/BS/search"
+            }
+        ]
+    },
+    {
+        id: 7,
+        name: "Kadane's Algorithm",
+        description: "Kadane's algorithm is a dynamic programming algorithm that finds the maximum sum of a contiguous subarray in an array of numbers",
+        category: "Array",
+        problems: [
+            {
+                id: "kd1",
+                name: "Maximum Subarray Sum",
+                difficulty: "Medium",
+                description: "Find the maximum sum of a subarray",
+                Link: "/KadanesAlgo"
+
+            }
+        ]
+    },
+    {
+        id: 8,
+        name: "Dutch National Flag",
+        description: "Dutch National Flag algorithm is used to sort an array of 0s, 1s, and 2s in linear time complexity",
+        category: "Array",
+        problems: [
+            {
+                id: "dnf1",
+                name: "Sort 0s, 1s, 2s",
+                difficulty: "Medium",
+                description: "Sort an array of 0s, 1s, and 2s",
+                Link: "/DutchNationalFlag"
+
+            }
+        ]
+    },
+    {
+        id: 9,
+        name: "Moore's Voting Algorithm",
+        description: "Moore's Voting Algorithm is used to find the majority element in an array",
+        category: "Array",
+        problems: [
+            {
+                id: "moore1",
+                name: "Majority Element more than N/2",
+                difficulty: "Medium",
+                description: "Find the majority element in an array where the majority element appears more than n/2 times",
+                Link: "/MooresVotingAlgorithm"
+
             }
         ]
     },

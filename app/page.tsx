@@ -67,7 +67,7 @@ export default async function Home() {
                     <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <Link
-                    href="/demo"
+                    href="/BS/search"
                     className="px-8 py-4 rounded-lg border-2 border-cyan-400/50 hover:border-cyan-400 text-cyan-400 transition-colors flex items-center gap-2"
                   >
                     Try Demo
@@ -79,7 +79,7 @@ export default async function Home() {
 
             {/* How to Use CodeFlow Section */}
             <div className="container mx-auto px-6">
-              <h2 className="text-3xl font-bold text-center mb-12">How to Use CodeFlow</h2>
+              <h2 className="text-3xl font-bold text-center mb-12">How to Use CodeMorph</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 shadow-lg">
                   <div className="flex items-center gap-4 mb-4">
@@ -154,42 +154,20 @@ export default async function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900/90 backdrop-blur-sm py-8">
+      <footer className="bg-slate-900/90 backdrop-blur-sm py-8 mt-7">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="/algorithms" className="hover:text-cyan-400">Algorithms</Link></li>
-                <li><Link href="/visualizer" className="hover:text-cyan-400">Visualizer</Link></li>
-                <li><Link href="/pricing" className="hover:text-cyan-400">Pricing</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="/docs" className="hover:text-cyan-400">Documentation</Link></li>
-                <li><Link href="/tutorials" className="hover:text-cyan-400">Tutorials</Link></li>
-                <li><Link href="/blog" className="hover:text-cyan-400">Blog</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="/about" className="hover:text-cyan-400">About</Link></li>
-                <li><Link href="/careers" className="hover:text-cyan-400">Careers</Link></li>
-                <li><Link href="/contact" className="hover:text-cyan-400">Contact</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="/privacy" className="hover:text-cyan-400">Privacy</Link></li>
-                <li><Link href="/terms" className="hover:text-cyan-400">Terms</Link></li>
-                <li><Link href="/security" className="hover:text-cyan-400">Security</Link></li>
-              </ul>
-            </div>
+          <div className="flex items-center justify-center space-x-2 text-gray-300">
+            <span>Made by</span>
+
+            <Link href="https://github.com/Ironsoldier353" className="text-blue-400 hover:text-blue-300 transition-colors font-medium mx-1">
+              Jeet Sarkar
+            </Link>
+            <span>and</span>
+            <Link href="https://github.com/SayanDas07" className="text-blue-400 hover:text-blue-300 transition-colors font-medium mx-1">
+              Sayan Das
+            </Link>
           </div>
+
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
             <p>© {new Date().getFullYear()} CodeFlow. All rights reserved.</p>
           </div>

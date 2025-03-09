@@ -86,5 +86,7 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("Error assigning badge:", error);
     return NextResponse.json({ error: error?.message || "Internal Error" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }

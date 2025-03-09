@@ -76,7 +76,7 @@ export async function PATCH(req: Request) {
       },
     });
 
-    return NextResponse.json(updatedUser, { status: 200 });
+    return NextResponse.json({...updatedUser, success: true,  message: "Social links updated successfully" }, { status: 200});
 
   } catch (error) {
     console.error('Error updating social links:', error);
