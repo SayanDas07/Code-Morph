@@ -86,5 +86,5 @@ We welcome contributions! If you'd like to improve Code Morph, please fork the r
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/SayanDas07/Code-Morph/blob/main/LICENSE) file for details.
 
