@@ -7,7 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Award, Calendar, Mail, Clock, Pencil, BookOpen, Flame } from "lucide-react";
+import { Loader2, Award, Calendar, Mail, Clock, Pencil, BookOpen, Flame, Trash2 } from "lucide-react";
 import { Github, Linkedin, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -236,6 +236,53 @@ const Dashboard: React.FC = () => {
       setIsSaving(false);
     }
   };
+
+  // Add this function to your component
+const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') => {
+  setIsSaving(true);
+  setErrorMessage('');
+  
+  try {
+    const removeData: { userId: string | undefined; removeGithub?: boolean; removeLinkedin?: boolean; removeLeetcode?: boolean } = {
+      userId: user?.id, 
+    };
+    
+    if (linkType === 'github') removeData.removeGithub = true;
+    if (linkType === 'linkedin') removeData.removeLinkedin = true;
+    if (linkType === 'leetcode') removeData.removeLeetcode = true;
+    
+    const response = await fetch('/api/socialLinks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(removeData),
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to remove link');
+    }
+    
+    // Update the local state with the response
+    setUserData(prev => prev ? ({
+      ...prev,
+      githubLink: data.githubLink,
+      linkedinLink: data.linkedinLink,
+      leetcodeLink: data.leetcodeLink,
+    }) : null);
+    
+    
+  } catch (error) {
+    console.error('Error removing link:', error);
+    setErrorMessage(error instanceof Error ? error.message : 'Failed to remove link');
+    
+  } finally {
+    setIsSaving(false);
+  }
+};
+
 
   // Helper function to group problems by month
   const groupProblemsByMonth = (problems: SolvedProblem[]) => {
@@ -513,18 +560,27 @@ const Dashboard: React.FC = () => {
                             <div className="flex-1 flex items-center gap-2 bg-gray-700/20 rounded-md p-2">
                               <Github className="text-gray-400 h-4 w-4" />
                               <span className="text-white flex-1 truncate">{userData.githubLink}</span>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => {
-                                  setEditMode(prev => ({ ...prev, github: true }));
-                                  setLinks(prev => ({ ...prev, githubLink: userData.githubLink || '' }));
-                                }}
-                                className="hover:bg-red-500 space-x-1 bg-white text-red-500"
-                              >
-                                <Pencil className="h-3 w-3" />
-
-                              </Button>
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    setEditMode(prev => ({ ...prev, github: true }));
+                                    setLinks(prev => ({ ...prev, githubLink: userData.githubLink || '' }));
+                                  }}
+                                  className="hover:bg-blue-500 space-x-1 bg-white text-blue-500"
+                                >
+                                  <Pencil className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleRemoveLink('github')}
+                                  className="hover:bg-red-500 space-x-1 bg-white text-red-500"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
                             </div>
                           ) : (
                             <div className="relative flex-1">
@@ -548,18 +604,27 @@ const Dashboard: React.FC = () => {
                             <div className="flex-1 flex items-center gap-2 bg-gray-700/20 rounded-md p-2">
                               <Linkedin className="text-gray-400 h-4 w-4" />
                               <span className="text-white flex-1 truncate">{userData.linkedinLink}</span>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => {
-                                  setEditMode(prev => ({ ...prev, linkedin: true }));
-                                  setLinks(prev => ({ ...prev, linkedinLink: userData.linkedinLink || '' }));
-                                }}
-                                className="hover:bg-red-500 space-x-1 bg-white text-red-500"
-                              >
-                                <Pencil className="h-3 w-3" />
-
-                              </Button>
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    setEditMode(prev => ({ ...prev, linkedin: true }));
+                                    setLinks(prev => ({ ...prev, linkedinLink: userData.linkedinLink || '' }));
+                                  }}
+                                  className="hover:bg-blue-500 space-x-1 bg-white text-blue-500"
+                                >
+                                  <Pencil className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleRemoveLink('linkedin')}
+                                  className="hover:bg-red-500 space-x-1 bg-white text-red-500"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
                             </div>
                           ) : (
                             <div className="relative flex-1">
@@ -575,7 +640,6 @@ const Dashboard: React.FC = () => {
                         </div>
                       </div>
 
-
                       {/* LeetCode */}
                       <div className="space-y-2">
                         <label className="text-sm text-gray-400">LeetCode Profile</label>
@@ -584,18 +648,27 @@ const Dashboard: React.FC = () => {
                             <div className="flex-1 flex items-center gap-2 bg-gray-700/20 rounded-md p-2">
                               <Code2 className="text-gray-400 h-4 w-4" />
                               <span className="text-white flex-1 truncate">{userData.leetcodeLink}</span>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => {
-                                  setEditMode(prev => ({ ...prev, leetcode: true }));
-                                  setLinks(prev => ({ ...prev, leetcodeLink: userData.leetcodeLink || '' }));
-                                }}
-                                className="hover:bg-red-500 space-x-1 bg-white text-red-500"
-                              >
-                                <Pencil className="h-3 w-3" />
-
-                              </Button>
+                              <div className="flex gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    setEditMode(prev => ({ ...prev, leetcode: true }));
+                                    setLinks(prev => ({ ...prev, leetcodeLink: userData.leetcodeLink || '' }));
+                                  }}
+                                  className="hover:bg-blue-500 space-x-1 bg-white text-blue-500"
+                                >
+                                  <Pencil className="h-3 w-3" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleRemoveLink('leetcode')}
+                                  className="hover:bg-red-500 space-x-1 bg-white text-red-500"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
                             </div>
                           ) : (
                             <div className="relative flex-1">
@@ -633,7 +706,6 @@ const Dashboard: React.FC = () => {
                     </Button>
 
                     <div className="text-sm text-gray-400">
-
                       <p>• Make sure to enter complete URLs including https://</p>
                     </div>
                   </div>

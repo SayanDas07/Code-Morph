@@ -86,3 +86,70 @@ export async function PATCH(req: Request) {
     );
   }
 }
+
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    
+    // Validate userId
+    if (!body.userId || typeof body.userId !== 'string') {
+      return NextResponse.json(
+        { error: 'Invalid userId' },
+        { status: 400 }
+      );
+    }
+    
+    // Check which links to remove
+    const updateData: any = {};
+    
+    if (body.removeGithub) {
+      updateData.githubLink = null;
+    }
+    
+    if (body.removeLinkedin) {
+      updateData.linkedinLink = null;
+    }
+    
+    if (body.removeLeetcode) {
+      updateData.leetcodeLink = null;
+    }
+    
+    // If no links specified to remove
+    if (Object.keys(updateData).length === 0) {
+      return NextResponse.json(
+        { error: "No links specified to remove" },
+        { status: 400 }
+      );
+    }
+    
+    // Update user record by removing specified links
+    const updatedUser = await prisma.user.update({
+      where: {
+        clerkId: body.userId,
+      },
+      data: updateData,
+      select: {
+        githubLink: true,
+        linkedinLink: true,
+        leetcodeLink: true,
+      },
+    });
+
+    return NextResponse.json(
+      { 
+        ...updatedUser, 
+        success: true, 
+        message: "Social links removed successfully" 
+      }, 
+      { status: 200 }
+    );
+
+  } catch (error) {
+    console.error('Error removing social links:', error);
+    return NextResponse.json(
+      { error: "Failed to remove social links" },
+      { status: 500 }
+    );
+  }
+}

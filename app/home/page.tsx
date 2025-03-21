@@ -96,12 +96,13 @@ const UserProfileSection: React.FC = () => {
       <div className="bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 shadow-xl">
         <div className="text-center text-red-400">
           <p>{error || "User profile not found"}</p>
+          <Link href= "/continue">
           <button
-            onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all duration-300"
+            className="mt-4 px-2 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all duration-300 text-sm"
           >
-            Retry
+            Complete Your Profile by clicking here
           </button>
+          </Link>
         </div>
       </div>
     );

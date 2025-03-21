@@ -156,9 +156,8 @@ export default async function Home() {
       {/* Footer */}
       <footer className="bg-slate-900/90 backdrop-blur-sm py-8 mt-7">
         <div className="container mx-auto px-6">
-          <div className="flex items-center justify-center space-x-2 text-gray-300">
+          <div className="flex items-center justify-center space-x-2 text-gray-300 pb-4">
             <span>Made by</span>
-
             <Link href="https://github.com/Ironsoldier353" className="text-blue-400 hover:text-blue-300 transition-colors font-medium mx-1">
               Jeet Sarkar
             </Link>
@@ -168,8 +167,21 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-            <p>© {new Date().getFullYear()} CodeFlow. All rights reserved.</p>
+
+
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-gray-400 text-sm mb-4 md:mb-0">© {new Date().getFullYear()} CodeMorph. All rights reserved.</p>
+
+              <div className="flex items-center space-x-8">
+                <Link href="/terms&cons" className="text-gray-400 hover:text-cyan-400 text-sm font-medium transition-colors">
+                  Terms & Conditions
+                </Link>
+                <Link href="/privacy" className="text-gray-400 hover:text-cyan-400 text-sm font-medium transition-colors">
+                  Privacy Policy
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
