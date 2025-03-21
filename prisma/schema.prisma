@@ -22,7 +22,7 @@ enum Badge {
 }
 
 model User {
-  id             String          @id
+  id             String          @id @unique
   clerkId        String          @unique
   firstName      String
   lastName       String?
