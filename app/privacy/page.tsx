@@ -64,7 +64,7 @@ export default function PrivacyPolicyPage() {
                         <div className="relative w-10 h-10">
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg blur-sm"></div>
                             <div className="absolute inset-0 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-700">
-                            <BookOpen className="h-5 w-5 text-blue-400" />
+                                <BookOpen className="h-5 w-5 text-blue-400" />
                             </div>
                         </div>
                         <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
@@ -148,13 +148,13 @@ export default function PrivacyPolicyPage() {
                                 </div>
                                 <div className="pl-16">
                                     <p className="mb-4 text-lg leading-relaxed">We may collect information about you in a variety of ways. The information we may collect via the Website includes:</p>
-                                    
+
                                     <h3 className="text-xl font-semibold text-blue-300 mt-6 mb-3">Personal Data</h3>
                                     <p className="mb-4 text-lg leading-relaxed">Personally identifiable information, such as your name, email address, and telephone number, that you voluntarily give to us when you register with the Website or when you choose to participate in various activities related to the Website. You are under no obligation to provide us with personal information of any kind, however your refusal to do so may prevent you from using certain features of the Website.</p>
-                                    
+
                                     <h3 className="text-xl font-semibold text-blue-300 mt-6 mb-3">Derivative Data</h3>
                                     <p className="mb-4 text-lg leading-relaxed">Information our servers automatically collect when you access the Website, such as your IP address, your browser type, your operating system, your access times, and the pages you have viewed directly before and after accessing the Website.</p>
-                                    
+
                                     <h3 className="text-xl font-semibold text-blue-300 mt-6 mb-3">Financial Data</h3>
                                     <p className="text-lg leading-relaxed">Financial information, such as data related to your payment method (e.g., valid credit card number, card brand, expiration date) that we may collect when you purchase, order, return, exchange, or request information about our services from the Website. We store only very limited, if any, financial information that we collect. Otherwise, all financial information is stored by our payment processor and you are encouraged to review their privacy policy and contact them directly for responses to your questions.</p>
                                 </div>
@@ -195,13 +195,13 @@ export default function PrivacyPolicyPage() {
                                 </div>
                                 <div className="pl-16">
                                     <p className="mb-4 text-lg leading-relaxed">We may share information we have collected about you in certain situations. Your information may be disclosed as follows:</p>
-                                    
+
                                     <h3 className="text-xl font-semibold text-blue-300 mt-6 mb-3">By Law or to Protect Rights</h3>
                                     <p className="mb-4 text-lg leading-relaxed">If we believe the release of information about you is necessary to respond to legal process, to investigate or remedy potential violations of our policies, or to protect the rights, property, and safety of others, we may share your information as permitted or required by any applicable law, rule, or regulation.</p>
-                                    
+
                                     <h3 className="text-xl font-semibold text-blue-300 mt-6 mb-3">Third-Party Service Providers</h3>
                                     <p className="mb-4 text-lg leading-relaxed">We may share your information with third parties that perform services for us or on our behalf, including payment processing, data analysis, email delivery, hosting services, customer service, and marketing assistance.</p>
-                                    
+
                                     <h3 className="text-xl font-semibold text-blue-300 mt-6 mb-3">Marketing Communications</h3>
                                     <p className="text-lg leading-relaxed">With your consent, or with an opportunity for you to withdraw consent, we may share your information with third parties for marketing purposes, as permitted by law.</p>
                                 </div>
@@ -292,7 +292,9 @@ export default function PrivacyPolicyPage() {
                                     <h2 className="text-3xl font-bold text-blue-200">Contact Us</h2>
                                 </div>
                                 <div className="pl-16">
-                                    <p className="text-lg leading-relaxed">If you have questions or comments about this Privacy Policy, please contact us at <a href="mailto:privacy@example.com" className="text-blue-300 underline hover:text-blue-200 transition-colors">privacy@example.com</a>.</p>
+                                    <p className="text-lg leading-relaxed">If you have questions or comments about this Privacy Policy, please <Link href="/contact">
+                                        <span className="text-blue-300 underline hover:text-blue-200 transition-colors">contact Us</span>.
+                                    </Link></p>
                                 </div>
                             </section>
                         </div>

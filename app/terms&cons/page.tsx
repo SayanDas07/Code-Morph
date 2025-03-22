@@ -215,7 +215,9 @@ export default function TermsAndConditionsPage() {
                                     <h2 className="text-3xl font-bold text-blue-200">Contact Us</h2>
                                 </div>
                                 <div className="pl-16">
-                                    <p className="text-lg leading-relaxed">If you have any questions about these Terms, please contact us at <a href="mailto:support@example.com" className="text-blue-300 underline hover:text-blue-200 transition-colors">support@example.com</a>.</p>
+                                    <p className="text-lg leading-relaxed">If you have any questions about these Terms, please <Link href="/contact">
+                                        <span className="text-blue-300 underline hover:text-blue-200 transition-colors">contact Us</span>.
+                                    </Link></p>
                                 </div>
                             </section>
                         </div>
