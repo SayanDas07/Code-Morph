@@ -4,9 +4,8 @@ import { Mail, Phone, BookOpen } from 'lucide-react';
 
 export default function Contact() {
     const contactMethods = [
-        { icon: <Mail className="h-5 w-5" />, text: "sayandasraja0778@gmail.com", label: "Email" },
+        { icon: <Mail className="h-5 w-5" />, text: "nexuscrew.official.team@gmail.com", label: "Email" },
         { icon: <Phone className="h-5 w-5" />, text: "+91 7003452992", label: "Phone" },
-        { icon: <Mail className="h-5 w-5" />, text: "jeetsarkarst353@gmail.com", label: "Email" },
         { icon: <Phone className="h-5 w-5" />, text: "+91 9330352190", label: "Phone" },
 
     ];

@@ -16,6 +16,7 @@ import ActiveDaysDisplay from "@/components/ActiveDaysDisplay";
 import BadgeStatus from "@/components/BadgeStatus";
 import { getProblemsByDifficulty, getTotalProblemsCount } from "@/utils/noOfProb";
 
+
 interface SolvedProblem {
   problemId: string;
   problemName: string;
@@ -39,6 +40,41 @@ interface ActiveDaysData {
   activeDays: number;
   activeDates: string[];
 }
+
+const Footer: React.FC = () => {
+  return (
+    <footer className="w-full bg-gradient-to-b from-slate-950 to-slate-900 backdrop-blur-md border-t border-gray-800/50 py-6">
+      <div className="container mx-auto px-8 max-w-7xl">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="text-sm text-gray-400">
+            © 2025 CodeMorph. All rights reserved.
+          </div>
+          <div className="flex items-center space-x-6">
+            <Link
+              href="/contact"
+              className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300"
+            >
+              Contact Us
+            </Link>
+            <Link
+              href="/terms&cons"
+              className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300"
+            >
+              Terms & Conditions
+            </Link>
+            <Link
+              href="/privacy"
+              className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300"
+            >
+              Privacy Policy
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
 
 
 
@@ -336,7 +372,8 @@ const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') =>
   const daysAsMember = Math.floor((new Date().getTime() - new Date(userData.createdAt).getTime()) / (1000 * 3600 * 24));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 text-gray-100 p-6">
+   <div>
+     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 text-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8 flex items-center justify-center">
           <Link href="/" className="flex items-center gap-2">
@@ -714,8 +751,13 @@ const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') =>
             </CardContent>
           </Card>
         </div>
+        
       </div>
+      
     </div>
+    <Footer />
+    
+   </div>
   );
 };
 

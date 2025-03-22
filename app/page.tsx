@@ -180,6 +180,9 @@ export default async function Home() {
                 <Link href="/privacy" className="text-gray-400 hover:text-cyan-400 text-sm font-medium transition-colors">
                   Privacy Policy
                 </Link>
+                <Link href="/contact" className="text-gray-400 hover:text-cyan-400 text-sm font-medium transition-colors">
+                  Contact Us
+                </Link>
               </div>
             </div>
           </div>
