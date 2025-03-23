@@ -9,6 +9,7 @@ const isPublicRoute = createRouteMatcher([
     "/terms&cons",
     "/privacy",
     "/contact",
+    "/creators",
 
 ]);
 
@@ -20,8 +21,9 @@ export default clerkMiddleware(async (auth, req) => {
     const isAccessingTerms = currentUrl.pathname === "/terms&cons";
     const isAccessingPrivacy = currentUrl.pathname === "/privacy";
     const isAccessingContact = currentUrl.pathname === "/contact";
+    const isAccessingCreators = currentUrl.pathname === "/creators";
 
-    if (userId && isPublicRoute(req) && !isAccessingDashboard && !isAccessingBS && !isAccessingTerms && !isAccessingPrivacy && !isAccessingContact) {
+    if (userId && isPublicRoute(req) && !isAccessingDashboard && !isAccessingBS && !isAccessingTerms && !isAccessingPrivacy && !isAccessingContact && !isAccessingCreators) {
         return NextResponse.redirect(new URL("/home", req.url));
     }
 

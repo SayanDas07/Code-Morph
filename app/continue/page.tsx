@@ -64,7 +64,7 @@ export default function StoreUserPage() {
         <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 flex flex-col">
             
             <nav className="w-full px-6 py-4 border-b border-white/10 backdrop-blur-md bg-slate-950/80">
-                <div className="max-w-7xl mx-auto flex items-center justify-between">
+                <div className="max-w-auto mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="relative w-10 h-10">
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg blur-sm"></div>

@@ -183,6 +183,9 @@ export default async function Home() {
                 <Link href="/contact" className="text-gray-400 hover:text-cyan-400 text-sm font-medium transition-colors">
                   Contact Us
                 </Link>
+                <Link href="/creators" className="text-gray-400 hover:text-cyan-400 text-sm font-medium transition-colors">
+                  Creators
+                </Link>
               </div>
             </div>
           </div>
