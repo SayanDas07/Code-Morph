@@ -25,7 +25,7 @@ const fallbackProfiles: Record<string, GithubProfile> = {
     "Ironsoldier353": {
         login: "Ironsoldier353",
         avatar_url: "/images/jeet-sarkar.jpeg",
-        bio: "Developer and creator of Code Morph. Data Science enthusiast.",
+        bio: "Developer and Creator of Code Morph. Data Science enthusiast.",
         name: "Jeet Sarkar",
         html_url: "https://github.com/Ironsoldier353",
         location: "kolkata, India",
@@ -33,7 +33,7 @@ const fallbackProfiles: Record<string, GithubProfile> = {
     "SayanDas07": {
         login: "SayanDas07",
         avatar_url: "/images/sayan-das.jpeg",
-        bio: "Developer and creator of Code Morph. ML Engineer and Full Stack Web Developer.",
+        bio: "Lead Developer and Creator of Code Morph. ML Engineer and Full Stack Web Developer.",
         name: "Sayan Das",
 
         html_url: "https://github.com/SayanDas07",
