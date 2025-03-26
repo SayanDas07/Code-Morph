@@ -2,53 +2,66 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Algorithm } from '@/utils/algorithmData';
+import { DataStructure } from '@/utils/dataStructureData';
 import { AlgorithmCard } from './AlgorithmCard';
+import { DataStructureCard } from './DataStructureCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface AlgorithmListProps {
     initialAlgorithms: Algorithm[];
+    initialDataStructures: DataStructure[];
 }
+// console.log("Initial Data Structures:", initialDataStructures);
 
-export function AlgorithmList({ initialAlgorithms }: AlgorithmListProps) {
+export function AlgorithmList({ 
+    initialAlgorithms , 
+    initialDataStructures, 
+}: AlgorithmListProps) {
+    console.log("Initial Data Structures:", initialDataStructures);
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const algorithmsPerPage = 3;
+    const [activeSection, setActiveSection] = useState<'algorithms' | 'dataStructures'>('algorithms');
+    const itemsPerPage = 3;
 
     useEffect(() => {
         const handleSearch = (e: CustomEvent) => {
             setSearchQuery(e.detail);
-            setCurrentPage(1); // Reset to first page when search changes
+            setCurrentPage(1);
         };
 
         window.addEventListener('searchChange', handleSearch as EventListener);
         return () => window.removeEventListener('searchChange', handleSearch as EventListener);
     }, []);
 
-    const filteredAlgorithms = useMemo(() => {
+    // Filtering logic for both algorithms and data structures
+    const filteredItems = useMemo(() => {
+        // if (!initialAlgorithms || !initialDataStructures) return [];
         const query = searchQuery.toLowerCase().trim();
-        if (!query) return initialAlgorithms;
+        const items = activeSection === 'algorithms' ? initialAlgorithms : initialDataStructures;
+        if (!items) return [];
+        if (!query) return items;
 
-        return initialAlgorithms.filter((algo) => {
-            const matchesAlgo =
-                algo.name.toLowerCase().includes(query) ||
-                algo.description.toLowerCase().includes(query) ||
-                algo.category.toLowerCase().includes(query);
+        return items.filter((item) => {
+            const matchesItem =
+                item.name.toLowerCase().includes(query) ||
+                item.description.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query);
 
-            const matchesProblems = algo.problems.some((problem) =>
+            const matchesProblems = 'problems' in item && item.problems.some((problem: { name: string; description: string; difficulty?: string }) =>
                 problem.name.toLowerCase().includes(query) ||
                 problem.description.toLowerCase().includes(query) ||
-                problem.difficulty.toLowerCase().includes(query)
+                (problem.difficulty && problem.difficulty.toLowerCase().includes(query))
             );
 
-            return matchesAlgo || matchesProblems;
+            return matchesItem || matchesProblems;
         });
-    }, [searchQuery, initialAlgorithms]);
+    }, [searchQuery, activeSection, initialAlgorithms, initialDataStructures]);
 
     // Calculate pagination
-    const totalPages = Math.ceil(filteredAlgorithms.length / algorithmsPerPage);
-    const indexOfLastAlgorithm = currentPage * algorithmsPerPage;
-    const indexOfFirstAlgorithm = indexOfLastAlgorithm - algorithmsPerPage;
-    const currentAlgorithms = filteredAlgorithms.slice(indexOfFirstAlgorithm, indexOfLastAlgorithm);
+    const totalPages = Math.ceil((filteredItems?.length || 0) / itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
     // Page navigation
     const nextPage = () => {
@@ -67,9 +80,50 @@ export function AlgorithmList({ initialAlgorithms }: AlgorithmListProps) {
 
     return (
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            {/* Section Selector */}
+            <div className="flex gap-4 mb-8 justify-center">
+            <button
+                onClick={() => {
+                    setActiveSection('dataStructures');
+                    setCurrentPage(1);
+                }}
+                className={`relative px-8 py-3 rounded-lg text-md font-semibold transition-all duration-300
+                    shadow-lg border border-transparent overflow-hidden 
+                    ${activeSection === 'dataStructures' 
+                        ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
+                        : 'bg-gray-900/70 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-800/80 hover:shadow-lg hover:scale-105'}`}
+            >
+                Data Structures
+            </button>
+
+            <button
+                onClick={() => {
+                    setActiveSection('algorithms');
+                    setCurrentPage(1);
+                }}
+                className={`relative px-8 py-3 rounded-lg text-md font-semibold transition-all duration-300
+                    shadow-lg border border-transparent overflow-hidden 
+                    ${activeSection === 'algorithms' 
+                        ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
+                        : 'bg-gray-900/70 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-800/80 hover:shadow-lg hover:scale-105'}`}
+            >
+                Algorithms
+            </button>
+        </div>
+
             <div className="space-y-8">
-                {currentAlgorithms.map((algorithm) => (
-                    <AlgorithmCard key={algorithm.id} algorithm={algorithm} />
+                {currentItems.map((item) => (
+                    activeSection === 'algorithms' ? (
+                        <AlgorithmCard 
+                            key={item.id} 
+                            algorithm={item as Algorithm} 
+                        />
+                    ) : (
+                        <DataStructureCard 
+                            key={item.id} 
+                            dataStructure={item as DataStructure} 
+                        />
+                    )
                 ))}
             </div>
 
