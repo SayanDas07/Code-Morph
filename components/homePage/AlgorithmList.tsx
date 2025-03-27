@@ -110,7 +110,7 @@ export function AlgorithmList({
                     Algorithms
                 </button>
             </div>
-            //remove this later
+            {/* remove this later */}
             {activeSection === 'dataStructures' && (
                 <Alert>
                     <Info className="h-6 w-6" />
