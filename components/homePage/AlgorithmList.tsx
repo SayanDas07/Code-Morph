@@ -5,16 +5,17 @@ import { Algorithm } from '@/utils/algorithmData';
 import { DataStructure } from '@/utils/dataStructureData';
 import { AlgorithmCard } from './AlgorithmCard';
 import { DataStructureCard } from './DataStructureCard';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 interface AlgorithmListProps {
     initialAlgorithms: Algorithm[];
     initialDataStructures: DataStructure[];
 }
 
-export function AlgorithmList({ 
-    initialAlgorithms , 
-    initialDataStructures, 
+export function AlgorithmList({
+    initialAlgorithms,
+    initialDataStructures,
 }: AlgorithmListProps) {
     console.log("Initial Data Structures:", initialDataStructures);
     const [searchQuery, setSearchQuery] = useState('');
@@ -81,46 +82,56 @@ export function AlgorithmList({
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             {/* Section Selector */}
             <div className="flex gap-4 mb-8 justify-center">
-            <button
-                onClick={() => {
-                    setActiveSection('dataStructures');
-                    setCurrentPage(1);
-                }}
-                className={`relative px-8 py-3 rounded-lg text-md font-semibold transition-all duration-300
+                <button
+                    onClick={() => {
+                        setActiveSection('dataStructures');
+                        setCurrentPage(1);
+                    }}
+                    className={`relative px-8 py-3 rounded-lg text-md font-semibold transition-all duration-300
                     shadow-lg border border-transparent overflow-hidden 
-                    ${activeSection === 'dataStructures' 
-                        ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
-                        : 'bg-gray-900/70 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-800/80 hover:shadow-lg hover:scale-105'}`}
-            >
-                Data Structures
-            </button>
+                    ${activeSection === 'dataStructures'
+                            ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
+                            : 'bg-gray-900/70 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-800/80 hover:shadow-lg hover:scale-105'}`}
+                >
+                    Data Structures
+                </button>
 
-            <button
-                onClick={() => {
-                    setActiveSection('algorithms');
-                    setCurrentPage(1);
-                }}
-                className={`relative px-8 py-3 rounded-lg text-md font-semibold transition-all duration-300
+                <button
+                    onClick={() => {
+                        setActiveSection('algorithms');
+                        setCurrentPage(1);
+                    }}
+                    className={`relative px-8 py-3 rounded-lg text-md font-semibold transition-all duration-300
                     shadow-lg border border-transparent overflow-hidden 
-                    ${activeSection === 'algorithms' 
-                        ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
-                        : 'bg-gray-900/70 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-800/80 hover:shadow-lg hover:scale-105'}`}
-            >
-                Algorithms
-            </button>
-        </div>
+                    ${activeSection === 'algorithms'
+                            ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
+                            : 'bg-gray-900/70 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-800/80 hover:shadow-lg hover:scale-105'}`}
+                >
+                    Algorithms
+                </button>
+            </div>
+            //remove this later
+            {activeSection === 'dataStructures' && (
+                <Alert>
+                    <Info className="h-6 w-6" />
+                    <AlertTitle>Work in Progress</AlertTitle>
+                    <AlertDescription>
+                        This Data Structures section is currently in progress. Meanwhile, boost your algorithms using our Algorithms section!
+                    </AlertDescription>
+                </Alert>
+            )}
 
             <div className="space-y-8">
                 {currentItems.map((item) => (
                     activeSection === 'algorithms' ? (
-                        <AlgorithmCard 
-                            key={item.id} 
-                            algorithm={item as Algorithm} 
+                        <AlgorithmCard
+                            key={item.id}
+                            algorithm={item as Algorithm}
                         />
                     ) : (
-                        <DataStructureCard 
-                            key={item.id} 
-                            dataStructure={item as DataStructure} 
+                        <DataStructureCard
+                            key={item.id}
+                            dataStructure={item as DataStructure}
                         />
                     )
                 ))}
@@ -137,11 +148,11 @@ export function AlgorithmList({
                         <ChevronLeft size={16} />
                         Previous
                     </button>
-                    
+
                     <span className="text-sm font-medium text-gray-300">
                         Page {currentPage} of {totalPages}
                     </span>
-                    
+
                     <button
                         onClick={nextPage}
                         disabled={currentPage === totalPages}
