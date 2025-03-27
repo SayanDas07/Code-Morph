@@ -9,6 +9,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import { SearchSection } from "@/components/homePage/SearchSection";
 import { AlgorithmList } from "@/components/homePage/AlgorithmList";
 import { algorithms } from "@/utils/algorithmData";
+import { dataStructures } from "@/utils/dataStructureData";
 
 interface UserDetails {
   id: string;
@@ -335,7 +336,7 @@ const HomePage: React.FC = () => {
           <div className="container mx-auto px-8 py-12 max-w-7xl relative z-0">
             <div className="space-y-10">
               <SearchSection />
-              <AlgorithmList initialAlgorithms={algorithms} />
+              <AlgorithmList initialAlgorithms={algorithms}  initialDataStructures= {dataStructures}/>
             </div>
           </div>
         </main>

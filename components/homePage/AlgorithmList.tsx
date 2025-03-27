@@ -11,7 +11,6 @@ interface AlgorithmListProps {
     initialAlgorithms: Algorithm[];
     initialDataStructures: DataStructure[];
 }
-// console.log("Initial Data Structures:", initialDataStructures);
 
 export function AlgorithmList({ 
     initialAlgorithms , 

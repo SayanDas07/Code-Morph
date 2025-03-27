@@ -4,6 +4,7 @@ export interface DataStructure {
     description: string;
     theory: string;
     algoLink?: string;
+    category: string;
 }
 
 // Sample Data (Modify as needed)
@@ -14,12 +15,13 @@ export const dataStructures: DataStructure[] = [
         description: "hello",
         theory: "hello",
         algoLink: "/",
+        category:"easy"
     },
     {
         id: "2",
         name: "String",
         description: "hello",
         theory: "hello",
-        algoLink: "/",
+        category: "easy"
     },
 ];
