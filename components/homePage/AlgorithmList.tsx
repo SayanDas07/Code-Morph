@@ -116,7 +116,7 @@ export function AlgorithmList({
                     <Info className="h-6 w-6" />
                     <AlertTitle>Work in Progress</AlertTitle>
                     <AlertDescription>
-                        This Data Structures section is currently in progress. Meanwhile, boost your algorithms using our Algorithms section!
+                        This Data Structures section is currently under progress. Meanwhile, boost your algorithms using our Algorithms section!
                     </AlertDescription>
                 </Alert>
             )}

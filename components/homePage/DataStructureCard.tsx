@@ -45,9 +45,9 @@ export function DataStructureCard({ dataStructure }: DataStructureCardProps) {
                     <h3 className="text-lg font-semibold text-gray-300 mb-3">Theory & Explanation</h3>
                     <p className="text-gray-400 leading-relaxed">{dataStructure.theory}</p>
 
-                    {dataStructure.algoLink && (
+                    {dataStructure.Link && (
                         <button
-                            onClick={() => handleVisualizationClick(dataStructure.algoLink)}
+                            onClick={() => handleVisualizationClick(dataStructure.Link)}
                             className="mt-4 flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg 
                                 bg-blue-600 text-white shadow-md hover:bg-blue-700 transition-all duration-300"
                         >
