@@ -5,7 +5,7 @@ import { Algorithm } from '@/utils/algorithmData';
 import { DataStructure } from '@/utils/dataStructureData';
 import { AlgorithmCard } from './AlgorithmCard';
 import { DataStructureCard } from './DataStructureCard';
-import { ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Info, Eye, EyeOff } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 interface AlgorithmListProps {
@@ -17,16 +17,17 @@ export function AlgorithmList({
     initialAlgorithms,
     initialDataStructures,
 }: AlgorithmListProps) {
-    console.log("Initial Data Structures:", initialDataStructures);
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [activeSection, setActiveSection] = useState<'algorithms' | 'dataStructures'>('algorithms');
+    const [showAll, setShowAll] = useState(false);
     const itemsPerPage = 3;
 
     useEffect(() => {
         const handleSearch = (e: CustomEvent) => {
             setSearchQuery(e.detail);
             setCurrentPage(1);
+            setShowAll(false);
         };
 
         window.addEventListener('searchChange', handleSearch as EventListener);
@@ -35,7 +36,6 @@ export function AlgorithmList({
 
     // Filtering logic for both algorithms and data structures
     const filteredItems = useMemo(() => {
-        // if (!initialAlgorithms || !initialDataStructures) return [];
         const query = searchQuery.toLowerCase().trim();
         const items = activeSection === 'algorithms' ? initialAlgorithms : initialDataStructures;
         if (!items) return [];
@@ -57,11 +57,13 @@ export function AlgorithmList({
         });
     }, [searchQuery, activeSection, initialAlgorithms, initialDataStructures]);
 
-    // Calculate pagination
+    // Calculate pagination or show all items
+    const currentItems = showAll 
+        ? filteredItems 
+        : filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    // Calculate total pages
     const totalPages = Math.ceil((filteredItems?.length || 0) / itemsPerPage);
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
     // Page navigation
     const nextPage = () => {
@@ -78,6 +80,12 @@ export function AlgorithmList({
         }
     };
 
+    // Toggle show all
+    const toggleShowAll = () => {
+        setShowAll(!showAll);
+        setCurrentPage(1);
+    };
+
     return (
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             {/* Section Selector */}
@@ -86,6 +94,7 @@ export function AlgorithmList({
                     onClick={() => {
                         setActiveSection('dataStructures');
                         setCurrentPage(1);
+                        setShowAll(false);
                     }}
                     className={`relative px-8 py-3 rounded-lg text-md font-semibold transition-all duration-300
                     shadow-lg border border-transparent overflow-hidden 
@@ -100,6 +109,7 @@ export function AlgorithmList({
                     onClick={() => {
                         setActiveSection('algorithms');
                         setCurrentPage(1);
+                        setShowAll(false);
                     }}
                     className={`relative px-8 py-3 rounded-lg text-md font-semibold transition-all duration-300
                     shadow-lg border border-transparent overflow-hidden 
@@ -138,28 +148,50 @@ export function AlgorithmList({
             </div>
 
             {/* Pagination Controls */}
-            {totalPages > 1 && (
+            {filteredItems.length > itemsPerPage && (
                 <div className="mt-10 flex items-center justify-center space-x-4">
-                    <button
-                        onClick={prevPage}
-                        disabled={currentPage === 1}
-                        className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white bg-gray-800/70 hover:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <ChevronLeft size={16} />
-                        Previous
-                    </button>
+                    {!showAll && (
+                        <>
+                            <button
+                                onClick={prevPage}
+                                disabled={currentPage === 1}
+                                className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white bg-gray-800/70 hover:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <ChevronLeft size={16} />
+                                Previous
+                            </button>
 
-                    <span className="text-sm font-medium text-gray-300">
-                        Page {currentPage} of {totalPages}
-                    </span>
+                            <span className="text-sm font-medium text-gray-300">
+                                Page {currentPage} of {totalPages}
+                            </span>
 
+                            <button
+                                onClick={nextPage}
+                                disabled={currentPage === totalPages}
+                                className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white bg-gray-800/70 hover:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Next
+                                <ChevronRight size={16} />
+                            </button>
+                        </>
+                    )}
+
+                    {/* Show All / Paginate Button */}
                     <button
-                        onClick={nextPage}
-                        disabled={currentPage === totalPages}
-                        className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white bg-gray-800/70 hover:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={toggleShowAll}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white bg-gray-800/70 hover:bg-gray-700/70 transition-all duration-300"
                     >
-                        Next
-                        <ChevronRight size={16} />
+                        {showAll ? (
+                            <>
+                                <EyeOff size={16} />
+                                Hide
+                            </>
+                        ) : (
+                            <>
+                                <Eye size={16} />
+                                Show All
+                            </>
+                        )}
                     </button>
                 </div>
             )}
