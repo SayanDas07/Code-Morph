@@ -442,7 +442,7 @@ public class ArrayExample {
                     </Button>
                   <Button onClick={handleRemoveElement} 
                    variant="destructive"
-                   disabled={inputIndex === '' || inputIndex === undefined || inputValue === '' || inputValue === undefined}
+                   disabled={inputIndex === '' || inputIndex === undefined }
                     >
                     <Trash2 size={16} className="mr-2" />
                     Remove at Index
