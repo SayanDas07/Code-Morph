@@ -42,7 +42,7 @@ export function DataStructureCard({ dataStructure }: DataStructureCardProps) {
 
             {isExpanded && (
                 <div className="p-6 bg-gray-800/40">
-                    <h3 className="text-lg font-semibold text-gray-300 mb-3">Theory & Explanation</h3>
+                    <h3 className="text-lg font-semibold text-gray-300 mb-3">Details</h3>
                     <p className="text-gray-400 leading-relaxed">{dataStructure.theory}</p>
 
                     {dataStructure.Link && (
@@ -52,7 +52,7 @@ export function DataStructureCard({ dataStructure }: DataStructureCardProps) {
                                 bg-blue-600 text-white shadow-md hover:bg-blue-700 transition-all duration-300"
                         >
                             <MonitorPlay className="h-5 w-5" />
-                            Visualize {dataStructure.name}
+                            Learn more about {dataStructure.name}
                         </button>
                     )}
                 </div>
