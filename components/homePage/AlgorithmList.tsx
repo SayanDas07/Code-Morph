@@ -5,8 +5,8 @@ import { Algorithm } from '@/utils/algorithmData';
 import { DataStructure } from '@/utils/dataStructureData';
 import { AlgorithmCard } from './AlgorithmCard';
 import { DataStructureCard } from './DataStructureCard';
-import { ChevronLeft, ChevronRight, Info, Eye, EyeOff } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { ChevronLeft, ChevronRight, Eye, EyeOff } from 'lucide-react';
+// import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 interface AlgorithmListProps {
     initialAlgorithms: Algorithm[];
@@ -121,15 +121,17 @@ export function AlgorithmList({
                 </button>
             </div>
             {/* remove this later */}
+            {/*
             {activeSection === 'dataStructures' && (
                 <Alert>
                     <Info className="h-6 w-6" />
                     <AlertTitle>Work in Progress</AlertTitle>
-                    <AlertDescription>
+                   <AlertDescription>
                         This Data Structures section is currently under progress. Meanwhile, boost your algorithms using our Algorithms section!
-                    </AlertDescription>
+                    </AlertDescription> 
                 </Alert>
             )}
+            */}
 
             <div className="space-y-8">
                 {currentItems.map((item) => (
