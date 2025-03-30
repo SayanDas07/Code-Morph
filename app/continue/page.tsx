@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
@@ -8,10 +8,18 @@ import { BookOpen } from "lucide-react";
 
 export default function StoreUserPage() {
     const [loading, setLoading] = useState(false);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const router = useRouter();
     const { isSignedIn, user } = useUser();
 
-    console.log("User:", user);
+    useEffect(() => {
+        if (user) {
+            setFirstName(user.firstName || "");
+            setLastName(user.lastName || "");
+        }
+    }, [user]);
+
 
     const handleStoreUser = async () => {
         if (!isSignedIn || !user) {
@@ -19,12 +27,17 @@ export default function StoreUserPage() {
             return;
         }
 
+        if (!firstName.trim()) {
+            alert("First name is required");
+            return;
+        }
+
         setLoading(true);
         try {
             const userData = {
                 clerkId: user.id,
-                firstName: user.firstName || "",
-                lastName: user.lastName || "",
+                firstName: firstName,
+                lastName: lastName,
                 email: user.primaryEmailAddress?.emailAddress || "",
                 imageUrl: user?.imageUrl || "",
             };
@@ -80,7 +93,7 @@ export default function StoreUserPage() {
                     {isSignedIn && user && (
                         <div className="flex items-center gap-4">
                             <p className="text-gray-400 text-sm hidden md:block">
-                                Welcome, <span className="text-white">{user.firstName}</span>
+                                Welcome, <span className="text-white">{user.firstName || user.username || "User"}!</span>
                             </p>
                             
                         </div>
@@ -94,7 +107,7 @@ export default function StoreUserPage() {
                         <div className="mb-16 text-center">
                             <h1 className="text-3xl font-bold text-white mb-2">Complete Your Profile</h1>
                             <div className="h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
-                            <p className="text-gray-400 mt-4">Please confirm your information to continue to your account</p>
+                            <p className="text-gray-400 mt-4">We have pre-filled your name from your account. You can update it <span className="font-bold">ONLY NOW</span> if needed.</p>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -107,21 +120,31 @@ export default function StoreUserPage() {
                                 </h2>
 
                                 <div className="space-y-4">
-                                    <div className="flex items-center">
-                                        <div className="w-10 h-10 flex-shrink-0 bg-blue-600/20 rounded-full flex items-center justify-center mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <div className="text-gray-500 text-sm">Full Name</div>
-                                            <div className="text-white font-medium">
-                                                {user.firstName} {user.lastName}
-                                            </div>
-                                        </div>
+                                    <div className="space-y-2">
+                                        <label className="text-gray-300 text-sm">First Name*</label>
+                                        <input 
+                                            type="text"
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            placeholder="Enter your first name"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                                            required
+                                        />
                                     </div>
 
-                                    <div className="flex items-center">
+                                    <div className="space-y-2">
+                                        <label className="text-gray-300 text-sm">Last Name*</label>
+                                        <input 
+                                            type="text"
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                            placeholder="Enter your last name"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center mt-4">
                                         <div className="w-10 h-10 flex-shrink-0 bg-blue-600/20 rounded-full flex items-center justify-center mr-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -146,7 +169,7 @@ export default function StoreUserPage() {
                                 </h2>
 
                                 <p className="text-gray-400 mb-8">
-                                    We have retrieved your information from your account. Please confirm these details are accurate before proceeding to your dashboard.
+                                    We have automatically filled in your name from your account. Feel free to modify it <span className="font-bold">ONLY NOW</span> if needed, then confirm to proceed to your dashboard.
                                 </p>
 
                                 <button
