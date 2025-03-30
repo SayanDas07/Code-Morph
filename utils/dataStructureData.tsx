@@ -13,6 +13,7 @@ export const dataStructures: DataStructure[] = [
         name: "Array",
         description: "Contiguous memory location storing multiple elements of the same type",
         theory: "Fixed-size collection of elements accessed by indices, allowing random access and efficient iteration",
+        "Link": "/ds/array",
         category: "easy"
     },
     {
@@ -20,6 +21,7 @@ export const dataStructures: DataStructure[] = [
         name: "Vector",
         description: "Dynamic array with automatic resizing capability",
         theory: "Templated container from STL that provides dynamic array functionality with automatic memory management",
+        "Link": "/ds/vector",
         category: "easy"
     },
     {
