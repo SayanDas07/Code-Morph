@@ -26,9 +26,10 @@ export const dataStructures: DataStructure[] = [
     },
     {
         id: "3",
-        name: "Linked List",
+        name: "Single Linked List",
         description: "Linear collection of elements where each element points to the next",
         theory: "Dynamic data structure with nodes containing data and reference to next node",
+        "Link": "/ds/ll",
         category: "medium"
     },
     {
