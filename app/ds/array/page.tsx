@@ -24,19 +24,49 @@ export default function ArrayVisualization() {
   ]);
 
   // State for animation
+  // State for animation
   const [animatingIndex, setAnimatingIndex] = useState<number | null>(null);
   const [animating2DIndex] = useState<{ row: number, col: number } | null>(null);
+  const [animationType, setAnimationType] = useState<'add' | 'remove' | 'insert' | 'sort' | 'reverse' | null>(null);
+  const [animationStep, setAnimationStep] = useState<number>(0);
+  const ANIMATION_DURATION = 1500; // Longer duration for better visibility
+
+  
+
+  // Enhanced animation helper function
+  const animateOperation = (index: number, type: 'add' | 'remove' | 'insert' | 'sort' | 'reverse') => {
+    setAnimatingIndex(index);
+    setAnimationType(type);
+    setAnimationStep(1);
+
+    // For multi-step animations
+    if (type === 'sort' || type === 'reverse') {
+      const totalSteps = 3;
+      for (let step = 2; step <= totalSteps; step++) {
+        setTimeout(() => {
+          setAnimationStep(step);
+        }, ANIMATION_DURATION * (step - 1) / totalSteps);
+      }
+    }
+
+    setTimeout(() => {
+      setAnimatingIndex(null);
+      setAnimationType(null);
+      setAnimationStep(0);
+    }, ANIMATION_DURATION);
+  };
 
   // Function to handle 1D array operations
   const handleAddElement = () => {
     if (inputValue !== '') {
       const newValue = parseInt(inputValue);
-      setArray1D([...array1D, newValue]);
-      setInputValue('');
+      animateOperation(array1D.length, 'add');
 
-      // Animation
-      setAnimatingIndex(array1D.length);
-      setTimeout(() => setAnimatingIndex(null), 1000);
+      // Delayed execution to show animation first
+      setTimeout(() => {
+        setArray1D([...array1D, newValue]);
+        setInputValue('');
+      }, ANIMATION_DURATION / 2);
     }
   };
 
@@ -45,15 +75,16 @@ export default function ArrayVisualization() {
       const newValue = parseInt(inputValue);
       const index = parseInt(inputIndex);
       if (index >= 0 && index <= array1D.length) {
-        const newArray = [...array1D];
-        newArray.splice(index, 0, newValue);
-        setArray1D(newArray);
-        setInputValue('');
-        setInputIndex('');
+        animateOperation(index, 'insert');
 
-        // Animation
-        setAnimatingIndex(index);
-        setTimeout(() => setAnimatingIndex(null), 1000);
+        // Delayed execution
+        setTimeout(() => {
+          const newArray = [...array1D];
+          newArray.splice(index, 0, newValue);
+          setArray1D(newArray);
+          setInputValue('');
+          setInputIndex('');
+        }, ANIMATION_DURATION / 2);
       }
     }
   };
@@ -62,29 +93,35 @@ export default function ArrayVisualization() {
     if (inputIndex !== '') {
       const index = parseInt(inputIndex);
       if (index >= 0 && index < array1D.length) {
-        // Animation before removing
-        setAnimatingIndex(index);
+        animateOperation(index, 'remove');
+
+        // Delayed execution
         setTimeout(() => {
           const newArray = [...array1D];
           newArray.splice(index, 1);
           setArray1D(newArray);
           setInputIndex('');
-          setAnimatingIndex(null);
-        }, 1000);
+        }, ANIMATION_DURATION / 2);
       }
     }
   };
 
   const handleSortArray = () => {
-    const newArray = [...array1D];
-    newArray.sort((a, b) => a - b);
-    setArray1D(newArray);
+    animateOperation(0, 'sort');
+    setTimeout(() => {
+      const newArray = [...array1D];
+      newArray.sort((a, b) => a - b);
+      setArray1D(newArray);
+    }, ANIMATION_DURATION / 2);
   };
 
   const handleReverseArray = () => {
-    const newArray = [...array1D];
-    newArray.reverse();
-    setArray1D(newArray);
+    animateOperation(0, 'reverse');
+    setTimeout(() => {
+      const newArray = [...array1D];
+      newArray.reverse();
+      setArray1D(newArray);
+    }, ANIMATION_DURATION / 2);
   };
 
   // Function to get built-in array functions based on selected language
@@ -266,18 +303,18 @@ public class ArrayExample {
             </div>
           </Link>
 
-  
+
           <span className="text-sm text-white/70">
             Version 1.0
           </span>
         </div>
       </nav>
-  
+
       <div className="w-full px-4 py-8 min-h-screen">
         <div className="flex justify-center items-center mb-6">
           <div className="flex flex-col items-center">
             <h1 className="text-3xl font-bold text-center mb-4">Array Data Structures</h1>
-            
+
             {/* Language Toggle - Using the style from your section selectors */}
             <div className="flex space-x-4">
               <button
@@ -285,8 +322,8 @@ public class ArrayExample {
                 className={`relative px-6 py-2 rounded-lg text-md font-semibold transition-all duration-300
                     shadow-lg border border-transparent overflow-hidden
                     ${language === 'cpp'
-                        ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
-                        : 'bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-700 hover:shadow-lg hover:scale-105'}`}
+                    ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
+                    : 'bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-700 hover:shadow-lg hover:scale-105'}`}
               >
                 C++
               </button>
@@ -295,15 +332,15 @@ public class ArrayExample {
                 className={`relative px-6 py-2 rounded-lg text-md font-semibold transition-all duration-300
                     shadow-lg border border-transparent overflow-hidden
                     ${language === 'java'
-                        ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
-                        : 'bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-700 hover:shadow-lg hover:scale-105'}`}
+                    ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white shadow-indigo-500/50 ring-2 ring-indigo-400 scale-105'
+                    : 'bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-500 hover:bg-gray-700 hover:shadow-lg hover:scale-105'}`}
               >
                 Java
               </button>
             </div>
           </div>
         </div>
-    
+
         <div className="flex justify-center">
           <div className="w-full">
             <Tabs defaultValue="theory">
@@ -321,7 +358,7 @@ public class ArrayExample {
                   Built-in Functions
                 </TabsTrigger>
               </TabsList>
-    
+
               <TabsContent value="theory" className="space-y-6">
                 <div className="bg-slate-800 p-6 rounded-lg border border-slate-700">
                   <div className="mb-4">
@@ -333,7 +370,7 @@ public class ArrayExample {
                       An array is a collection of elements of the same type stored at contiguous memory locations.
                       It is the simplest data structure where each data element can be randomly accessed by using its index number.
                     </p>
-                    
+
                     <h3 className="text-xl font-semibold mt-4">Key Characteristics:</h3>
                     <ul className="list-disc pl-8 space-y-2 text-slate-300">
                       <li>Elements are stored in contiguous memory locations</li>
@@ -342,7 +379,7 @@ public class ArrayExample {
                       <li>All elements must be of the same data type</li>
                       <li>Index-based (starting from 0 in most languages)</li>
                     </ul>
-                    
+
                     <h3 className="text-xl font-semibold mt-4">Types of Arrays:</h3>
                     <ul className="list-disc pl-8 space-y-2 text-slate-300">
                       <li><strong>One-dimensional arrays:</strong> Linear collection of elements (e.g., [1, 2, 3, 4])</li>
@@ -350,7 +387,7 @@ public class ArrayExample {
                       <li><strong>Static arrays:</strong> Fixed size defined at compile time (traditional arrays)</li>
                       <li><strong>Dynamic arrays:</strong> Size can be modified at runtime (vectors in C++, ArrayList in Java)</li>
                     </ul>
-                    
+
                     <h3 className="text-xl font-semibold mt-4">Common Operations and Time Complexity:</h3>
                     <ul className="list-disc pl-8 space-y-4 text-slate-300">
                       <li><strong>Access by index:</strong> O(1) - Constant time</li>
@@ -361,7 +398,7 @@ public class ArrayExample {
                       <li><strong>Deletion:</strong> O(n) - need to shift elements</li>
                       <li><strong>Traversal:</strong> O(n) - need to visit each element</li>
                     </ul>
-                    
+
                     <div className="mt-6">
                       <h3 className="text-xl font-semibold">Memory Representation:</h3>
                       <p className="mt-2 text-slate-300">
@@ -369,7 +406,7 @@ public class ArrayExample {
                         For example, an integer array of size 5 in C++ (assuming 4 bytes per integer) would occupy 20 bytes of memory.
                       </p>
                     </div>
-                    
+
                     <div className="bg-slate-900 p-4 rounded-lg mt-6 border border-slate-700">
                       <h3 className="text-xl font-semibold">Implementation in {language.toUpperCase()}</h3>
                       <pre className="bg-slate-950 text-slate-300 p-4 rounded-lg overflow-x-auto mt-2">
@@ -378,7 +415,7 @@ public class ArrayExample {
                     </div>
                   </div>
                 </div>
-    
+
                 <div className="bg-slate-800 p-6 rounded-lg border border-slate-700">
                   <div className="mb-4">
                     <h2 className="text-2xl font-bold">Advantages and Limitations</h2>
@@ -407,7 +444,7 @@ public class ArrayExample {
                   </div>
                 </div>
               </TabsContent>
-    
+
               <TabsContent value="visualization" className="space-y-6">
                 <div className="bg-slate-800 p-6 rounded-lg border border-slate-700">
                   <div className="mb-4">
@@ -419,14 +456,28 @@ public class ArrayExample {
                       {array1D.map((value, index) => (
                         <div
                           key={index}
-                          className={`flex flex-col items-center ${animatingIndex === index ? 'animate-pulse bg-blue-600' : 'bg-slate-700'} rounded-md p-4 w-16`}
+                          className={`
+      flex flex-col items-center rounded-md p-4 w-16 transition-all duration-500
+      ${animatingIndex === index
+                              ? `${animationType === 'add' ? 'bg-green-600 scale-110 shadow-lg shadow-green-500/50' :
+                                animationType === 'remove' ? 'bg-red-600 scale-90 opacity-70' :
+                                  animationType === 'insert' ? 'bg-blue-600 scale-110 shadow-lg shadow-blue-500/50' :
+                                    'bg-blue-600'
+                              }`
+                              : 'bg-slate-700'
+                            }
+      ${animationType === 'sort' && animationStep > 0 ? 'translate-y-2' : ''}
+      ${animationType === 'reverse' && animationStep > 0 ? 'rotate-180' : ''}
+    `}
                         >
-                          <span className="text-lg font-bold">{value}</span>
+                          <span className={`text-lg font-bold transition-all duration-300 ${animatingIndex === index ? 'text-white' : ''}`}>
+                            {value}
+                          </span>
                           <span className="text-xs text-slate-400">idx: {index}</span>
                         </div>
                       ))}
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-lg mx-auto">
                       <div className="space-y-2">
                         <p className="font-medium text-center">Value</p>
@@ -451,30 +502,30 @@ public class ArrayExample {
                         />
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-wrap justify-center gap-2">
                       <Button onClick={handleAddElement}
                         variant="outline"
                         className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600"
                         disabled={inputValue === '' || inputValue === undefined}
-                        >
-                        <Plus size={16} className="mr-2" />        
+                      >
+                        <Plus size={16} className="mr-2" />
                         Add to End
                       </Button>
-                      <Button 
-                        onClick={handleInsertElement} 
+                      <Button
+                        onClick={handleInsertElement}
                         variant="outline"
                         className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600"
                         disabled={inputIndex === '' || inputIndex === undefined || inputValue === '' || inputValue === undefined}
-                        >
+                      >
                         <Plus size={16} className="mr-2" />
                         Insert at Index
-                        </Button>
-                      <Button onClick={handleRemoveElement} 
+                      </Button>
+                      <Button onClick={handleRemoveElement}
                         variant="destructive"
                         className="bg-red-800 hover:bg-red-700 text-white"
-                        disabled={inputIndex === '' || inputIndex === undefined }
-                        >
+                        disabled={inputIndex === '' || inputIndex === undefined}
+                      >
                         <Trash2 size={16} className="mr-2" />
                         Remove at Index
                       </Button>
@@ -486,7 +537,7 @@ public class ArrayExample {
                         Reverse
                       </Button>
                     </div>
-                    
+
                     <div className="mt-6">
                       <h3 className="text-lg font-semibold mb-2 text-center">Operation Result ({language.toUpperCase()}):</h3>
                       <div className="bg-slate-950 text-slate-300 p-4 rounded-lg overflow-x-auto">
@@ -505,7 +556,7 @@ public class ArrayExample {
                     </div>
                   </div>
                 </div>
-    
+
                 <div className="bg-slate-800 p-6 rounded-lg border border-slate-700">
                   <div className="mb-4">
                     <h2 className="text-2xl font-bold">2D Array Visualization</h2>
@@ -521,8 +572,8 @@ public class ArrayExample {
                                 <td
                                   key={colIndex}
                                   className={`border border-slate-600 p-4 text-center
-                                    ${animating2DIndex && animating2DIndex.row === rowIndex && animating2DIndex.col === colIndex 
-                                      ? 'bg-blue-600 animate-pulse' 
+                                    ${animating2DIndex && animating2DIndex.row === rowIndex && animating2DIndex.col === colIndex
+                                      ? 'bg-blue-600 animate-pulse'
                                       : 'bg-slate-700'}`}
                                 >
                                   {value}
@@ -533,7 +584,7 @@ public class ArrayExample {
                         </tbody>
                       </table>
                     </div>
-                    
+
                     <div className="mt-6">
                       <h3 className="text-lg font-semibold mb-2 text-center">2D Array Code Representation ({language.toUpperCase()}):</h3>
                       <div className="bg-slate-950 text-slate-300 p-4 rounded-lg overflow-x-auto">
@@ -561,7 +612,7 @@ public class ArrayExample {
                   </div>
                 </div>
               </TabsContent>
-    
+
               <TabsContent value="builtInFunctions" className="space-y-6">
                 <div className="bg-slate-800 p-6 rounded-lg border border-slate-700">
                   <div className="mb-4">
@@ -586,7 +637,7 @@ public class ArrayExample {
                       </tbody>
                     </table>
                   </div>
-                  
+
                   <div className="mt-8">
                     <h3 className="text-xl font-semibold mb-4 text-center">Example Usage</h3>
                     <div className="bg-slate-950 text-slate-300 p-4 rounded-lg overflow-x-auto">
