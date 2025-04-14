@@ -156,9 +156,9 @@ const HashMapVisualizer = () => {
                 onChange={(e) => setAnimationSpeed(parseInt(e.target.value))}
                 disabled={traversing}
               >
-                <option value="2500">Fast</option>
+                <option value="2500">Slow</option>
                 <option value="1500">Normal</option>
-                <option value="1000">Slow</option>
+                <option value="1000">Fast</option>
               </select>
             </div>
             
