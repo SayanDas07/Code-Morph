@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Code, Brain, TrendingUp } from 'lucide-react';
 
 import HashMapVisualizer from '@/components/Hashmap/frequency';
+import Link from 'next/link';
 
 const HashMapPage = () => {
 
@@ -55,6 +56,31 @@ const HashMapPage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900">
+            <nav className="sticky top-0 z-50 w-full px-6 py-4 border-b border-white/10 backdrop-blur-lg bg-slate-950/90">
+                <div className="w-full flex items-center justify-between">
+                    <Link href="/home">
+                        <div className="flex items-center gap-3 group">
+                            <div className="relative w-10 h-10 transition-transform group-hover:scale-105">
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-violet-600 rounded-lg blur-sm opacity-80 group-hover:opacity-100"></div>
+                                <div className="absolute inset-0 bg-slate-900 rounded-lg flex items-center justify-center border border-slate-700/50">
+                                    <BookOpen className="h-5 w-5 text-blue-400 group-hover:text-violet-300 transition-colors" />
+                                </div>
+                            </div>
+                            <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400 transition-all group-hover:from-blue-300 group-hover:to-violet-300">
+                                Code Morph
+                            </span>
+                        </div>
+                    </Link>
+
+
+                    <div className="flex items-center gap-3">
+                        <span className="text-sm text-white/60 bg-slate-800/50 px-3 py-1 rounded-full border border-slate-700/30">
+                            Version 2.0
+                        </span>
+                        
+                    </div>
+                </div>
+            </nav>
             {/* Header Section */}
             <div className="relative bg-slate-900 border-b border-slate-800 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-violet-500/10" />
