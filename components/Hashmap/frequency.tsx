@@ -13,8 +13,17 @@ const HashMapVisualizer = () => {
   const [traversing, setTraversing] = useState(false);
   const [currentStep, setCurrentStep] = useState(-1);
   const [currentLine, setCurrentLine] = useState(0);
+  
+  // Improved speed settings with descriptive labels and consistent timing values
+  const speedOptions = [
+    { label: "Very Slow", value: 2500 },
+    { label: "Slow", value: 2000 },
+    { label: "Normal", value: 800 },
+    { label: "Fast", value: 500 },
+    { label: "Very Fast", value: 300 }
+  ];
+  
   const [animationSpeed, setAnimationSpeed] = useState(800);
-
   
   const calculateFrequency = (array: number[]) => {
     const frequencyMap: { [key: number]: number } = {};
@@ -30,19 +39,22 @@ const HashMapVisualizer = () => {
     setCurrentStep(-1);
     setCurrentLine(1); 
 
+    // Calculate timings based on animation speed
+    const stepDelay = animationSpeed;
+    const lineChangeDelay = animationSpeed * 0.3;
+    const finalDelay = animationSpeed * 0.5;
 
     setTimeout(() => {
       let index = 0;
       const traverseInterval = setInterval(() => {
         if (index < array.length) {
-         
+          // Set current index
           setCurrentStep(index);
           setCurrentLine(2); 
           
           setTimeout(() => {
             const currentValue = array[index];
             setCurrentLine(3); 
-
             
             setTimeout(() => {
               setFrequencies((prev) => {
@@ -52,10 +64,9 @@ const HashMapVisualizer = () => {
               });
               
               setCurrentLine(4); 
-
               index += 1;
-            }, animationSpeed * 0.3);
-          }, animationSpeed * 0.3);
+            }, lineChangeDelay);
+          }, lineChangeDelay);
         } else {
           clearInterval(traverseInterval);
           setCurrentLine(5); 
@@ -63,10 +74,10 @@ const HashMapVisualizer = () => {
             setTraversing(false);
             setCurrentLine(0);
             setCurrentStep(-1);
-          }, animationSpeed * 0.5);
+          }, finalDelay);
         }
-      }, animationSpeed);
-    }, 500);
+      }, stepDelay);
+    }, animationSpeed * 0.5); // Initial delay before starting animation
   };
 
   const restartVisualization = () => {
@@ -77,9 +88,10 @@ const HashMapVisualizer = () => {
     setCurrentLine(0);
     
     // Wait a brief moment before starting again to ensure clean state
+    // Adjust wait time based on speed setting for better user experience
     setTimeout(() => {
       startTraversal();
-    }, 300);
+    }, Math.min(300, animationSpeed * 0.3));
   };
 
   useEffect(() => {
@@ -117,8 +129,6 @@ const HashMapVisualizer = () => {
     { line: 7, code: "}", indent: 0 }
   ];
 
-
-
   const mapVisualizerLineToCppLine = () => {
     switch (currentLine) {
       case 1: return 2; // Initializing map
@@ -128,6 +138,12 @@ const HashMapVisualizer = () => {
       case 5: return 6; // Return result
       default: return -1;
     }
+  };
+
+  // Animation duration for motion components based on speed setting
+  const getAnimationDuration = () => {
+    // Scale animation speed proportionally but keep it snappy
+    return Math.max(0.1, Math.min(0.5, animationSpeed / 2000));
   };
 
   return (
@@ -156,9 +172,11 @@ const HashMapVisualizer = () => {
                 onChange={(e) => setAnimationSpeed(parseInt(e.target.value))}
                 disabled={traversing}
               >
-                <option value="2500">Slow</option>
-                <option value="1500">Normal</option>
-                <option value="1000">Fast</option>
+                {speedOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
             
@@ -201,7 +219,7 @@ const HashMapVisualizer = () => {
                     key={index}
                     className={`
                       w-14 h-14 flex flex-col items-center justify-center rounded-lg
-                      border-2 transition-all duration-300
+                      border-2 transition-all
                       ${index === currentStep ? "bg-blue-600 border-blue-400 shadow-lg shadow-blue-900/50" : 
                         frequencies[num] && !traversing ? "bg-green-800 border-green-500" : "bg-slate-800 border-slate-700"}
                     `}
@@ -211,7 +229,7 @@ const HashMapVisualizer = () => {
                       y: index === currentStep ? -10 : 0,
                       opacity: index === currentStep ? 1 : (traversing && index > currentStep ? 0.5 : 0.9)
                     }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: getAnimationDuration() }}
                   >
                     <span className="text-lg font-bold text-white">{num}</span>
                     <span className="text-xs text-slate-300">idx: {index}</span>
@@ -227,7 +245,7 @@ const HashMapVisualizer = () => {
                   className="flex flex-col items-center"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: getAnimationDuration() }}
                 >
                   <ArrowRight className="text-yellow-500" size={20} />
                   <div className="text-xs text-yellow-500 font-mono">num = {array[currentStep]}</div>
@@ -262,7 +280,7 @@ const HashMapVisualizer = () => {
                       `}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: getAnimationDuration() * 1.5 }}
                     >
                       <div className="w-1/2 font-mono text-lg font-semibold text-white">{key}</div>
                       <div className="w-1/2 font-mono text-lg text-green-400">
@@ -272,7 +290,7 @@ const HashMapVisualizer = () => {
                             className="inline-block ml-1 text-yellow-400"
                             initial={{ opacity: 0, scale: 0.5 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.2 }}
+                            transition={{ duration: getAnimationDuration() }}
                           >
                             ↑
                           </motion.span>
@@ -331,7 +349,7 @@ const HashMapVisualizer = () => {
                         backgroundColor: codeLine.line === mapVisualizerLineToCppLine() ? "rgba(30, 58, 138, 0.4)" : "transparent",
                         scale: codeLine.line === mapVisualizerLineToCppLine() ? 1.02 : 1,
                       }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: getAnimationDuration() }}
                     >
                       <span className="mr-2 text-slate-600 select-none">{codeLine.line}</span>
                       <span style={{ paddingLeft: `${codeLine.indent * 20}px` }}>
