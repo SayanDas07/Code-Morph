@@ -132,13 +132,6 @@ const HashMapVisualizer = () => {
 
   return (
     <div className="p-6 bg-slate-800 rounded-lg shadow-xl min-h-[600px]">
-      {/* Header with title */}
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center">
-          <h2 className="text-2xl font-bold text-white">Hash Map Visulization</h2>
-        </div>
-      </div>
-      
       {/* Controls section */}
       <div className="mb-6 p-4 bg-slate-900 rounded-lg border border-slate-700">
         <div className="flex flex-wrap items-center justify-between gap-4">
