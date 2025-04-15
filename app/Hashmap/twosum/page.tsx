@@ -188,6 +188,41 @@ const TwoSumPage = () => {
                     ))}
                 </div>
             </div>
+            <footer className="w-full bg-gray-900/80 backdrop-blur-md border-t border-gray-800/50 py-6">
+                <div className="container mx-auto px-8 max-w-7xl">
+                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div className="text-sm text-gray-400">
+                            © 2025 CodeMorph. All rights reserved.
+                        </div>
+                        <div className="flex items-center space-x-6">
+                            <Link
+                                href="/contact"
+                                className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Contact Us
+                            </Link>
+                            <Link
+                                href="/terms&cons"
+                                className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Terms & Conditions
+                            </Link>
+                            <Link
+                                href="/privacy"
+                                className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Privacy Policy
+                            </Link>
+                            <Link
+                                href="/creators"
+                                className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                            >
+                                Creators
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 };

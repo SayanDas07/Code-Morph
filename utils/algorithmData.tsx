@@ -64,29 +64,6 @@ export const algorithms: Algorithm[] = [
     },
     {
         id: 2,
-        name: "Two Pointers",
-        description: "Solving problems using two pointers moving through the data structure",
-        category: "Array",
-        problems: [
-            {
-                id: "tp1",
-                name: "Two Sum Sorted",
-                difficulty: "Easy",
-                description: "Find two numbers that add up to target in sorted array",
-                Link: "/twopointersalgorithm/twoSumSorted"
-            },
-            {
-                id: "tp2",
-                name: "Binary Search",
-                difficulty: "Medium",
-                description: "Find an element in a sorted array",
-                Link: "/twopointersalgorithm/twoSumSorted"
-            },
-
-        ]
-    },
-    {
-        id: 3,
         name: "Sliding window technique",
         description: "An efficient technique for solving problems involving subarrays or substrings by dynamically adjusting a window over consecutive elements",
         category: "Array",
@@ -108,7 +85,7 @@ export const algorithms: Algorithm[] = [
         ]
     },
     {
-        id: 4,
+        id: 3,
         name: "DFS traversals",
         description: "Depth First Search is a graph traversal algorithm that explores as far as possible along each branch before backtracking",
         category: "Tree, Graph",
@@ -145,7 +122,7 @@ export const algorithms: Algorithm[] = [
         ]
     },
     {
-        id: 5,
+        id: 4,
         name: "BFS/Level Order Traversal",
         description: "Breadth First Search is a graph traversal algorithm that explores the neighbor nodes at the present depth prior to moving on to the nodes at the next depth level",
         category: "Tree, Graph",
@@ -176,7 +153,7 @@ export const algorithms: Algorithm[] = [
         ]
     },
     {
-        id: 6,
+        id: 5,
         name: "Binary Search",
         description: "Binary search is a search algorithm that finds the position of a target value within a sorted array",
         category: "Array",
@@ -191,7 +168,7 @@ export const algorithms: Algorithm[] = [
         ]
     },
     {
-        id: 7,
+        id: 6,
         name: "Kadane's Algorithm",
         description: "Kadane's algorithm is a dynamic programming algorithm that finds the maximum sum of a contiguous subarray in an array of numbers",
         category: "Array",
@@ -207,7 +184,7 @@ export const algorithms: Algorithm[] = [
         ]
     },
     {
-        id: 8,
+        id: 7,
         name: "Dutch National Flag",
         description: "Dutch National Flag algorithm is used to sort an array of 0s, 1s, and 2s in linear time complexity",
         category: "Array",
@@ -223,7 +200,7 @@ export const algorithms: Algorithm[] = [
         ]
     },
     {
-        id: 9,
+        id: 8,
         name: "Moore's Voting Algorithm",
         description: "Moore's Voting Algorithm is used to find the majority element in an array",
         category: "Array",
