@@ -68,7 +68,7 @@ export const Theory = () => {
           <p>
             - The <strong>fast</strong> pointer has reached the end of the list, so the <strong>slow</strong> pointer stops at node <strong>4</strong>, which is the middle node.
           </p>
-          <p className="bg-gray-100 p-3 rounded-md">
+          <p className="p-3 rounded-md">
             <strong>Result:</strong> The middle node is <strong>4</strong>.
           </p>
         </div>
@@ -90,7 +90,7 @@ export const Theory = () => {
           <p>
             - The <strong>fast</strong> pointer has reached the end of the list, so the <strong>slow</strong> pointer stops at node <strong>4</strong>, which is the second middle node.
           </p>
-          <p className="bg-gray-100 p-3 rounded-md">
+          <p className="p-3 rounded-md">
             <strong>Result:</strong> The middle node is <strong>4</strong> (second middle node in an even-sized list).
           </p>
         </div>
