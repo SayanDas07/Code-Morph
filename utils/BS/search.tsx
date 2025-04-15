@@ -2,122 +2,95 @@ import React from 'react';
 import { useState } from "react";
 import { Check, Copy } from 'lucide-react';
 import { SiLeetcode } from 'react-icons/si';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 export const Theory = () => {
-    const [expandedSection, setExpandedSection] = useState<string | null>('overview');
-
-    const sections = {
-        overview: {
-            title: "Overview of Binary Search",
-            content: `Binary search is a highly efficient search algorithm that finds the position of a target value within a sorted array. 
-      It works by repeatedly dividing the search range in half, eliminating half of the remaining elements with each iteration.
-      
-      Time Complexity: O(log n)
-      Space Complexity: O(log n) for recursive, O(1) for iterative`
-        },
-        prerequisites: {
-            title: "Prerequisites",
-            content: `1. The array must be sorted in ascending or descending order
-2. Random access to elements (like in an array) is required
-3. The comparison operator (>, <, =) must be defined for the elements`
-        },
-        algorithm: {
-            title: "Algorithm Steps",
-            content: `1. Initialize pointers:
-   - left (l) = start of array
-   - right (r) = end of array
-
-2. While left ≤ right:
-   - Calculate mid = left + (right - left) / 2
-   - If element at mid is target, return mid
-   - If target < mid element, set right = mid - 1
-   - If target > mid element, set left = mid + 1
-
-3. If element not found, return -1`
-        },
-        implementation: {
-            title: "Code Implementation",
-            content: `Key points in the implementation:
-
-1. Base case: if (left > right) return -1
-2. Mid calculation: mid = left + (right - left) / 2
-   - We use this instead of (left + right) / 2 to prevent integer overflow
-3. Recursive approach:
-   - Makes three recursive calls at most
-   - Each call reduces search space by half
-4. Iterative approach:
-   - Uses while loop
-   - More space efficient than recursive`
-        },
-        applications: {
-            title: "Real-world Applications",
-            content: `1. Database Indexing
-2. Dictionary and Phone Book Implementations
-3. Finding IP Addresses in Routing Tables
-4. Computer Graphics (Binary Space Partitioning)
-5. Machine Learning (Finding Optimal Parameters)
-6. Version Control Systems (Finding Bugs using Git Bisect)`
-        }
-    };
-
-    interface TheorySectionProps {
-        id: string;
-        title: string;
-        content: string;
-    }
-
-    const TheorySection = ({ id, title, content }: TheorySectionProps) => (
-        <div className="mb-4">
-            <button
-                onClick={() => setExpandedSection(expandedSection === id ? null : id)}
-                className="w-full flex justify-between items-center p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
-            >
-                <h2 className="text-lg font-semibold text-white">{title}</h2>
-                {expandedSection === id ?
-                    <ChevronUp className="text-slate-400" /> :
-                    <ChevronDown className="text-slate-400" />
-                }
-            </button>
-            {expandedSection === id && (
-                <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-2 p-4 bg-slate-800 rounded-lg"
-                >
-                    <div className="text-slate-300 whitespace-pre-line">
-                        {content}
-                    </div>
-                </motion.div>
-            )}
-        </div>
-    );
-
     return (
-        <div className="p-6 bg-slate-900 rounded-lg shadow-xl max-w-auto mx-auto">
-            <h1 className="text-2xl font-bold text-white mb-6">Binary Search Algorithm Theory</h1>
+        <div className="space-y-6">
+            <h2 className="text-2xl font-semibold">Theory: Binary Search Algorithm</h2>
 
-            {Object.entries(sections).map(([id, section]) => (
-                <TheorySection
-                    key={id}
-                    id={id}
-                    title={section.title}
-                    content={section.content}
-                />
-            ))}
+            <p>
+                <strong>Binary search</strong> is a highly efficient search algorithm that finds the position of a target value within a sorted array.
+                It works by repeatedly dividing the search range in half, eliminating half of the remaining elements with each iteration.
+                This technique works efficiently on any sorted collection that allows random access.
+            </p>
 
-            <div className="mt-6 p-4 bg-blue-900/30 rounded-lg">
-                <h3 className="text-blue-300 font-semibold mb-2">Key Takeaways:</h3>
-                <ul className="list-disc list-inside text-blue-200 space-y-2">
-                    <li>Binary search requires a sorted array</li>
-                    <li>Reduces search space by half in each step</li>
-                    <li>Logarithmic time complexity makes it extremely efficient</li>
-                    <li>Best used when data is sorted and random access is available</li>
-                </ul>
-            </div>
+            <h3 className="text-xl font-semibold">Key Concepts:</h3>
+            <ul className="list-disc list-inside space-y-2">
+                <li>
+                    <strong>Time Complexity:</strong> O(log n)
+                </li>
+                <li>
+                    <strong>Space Complexity:</strong> O(log n) for recursive, O(1) for iterative
+                </li>
+                <li>
+                    The array must be sorted in ascending or descending order
+                </li>
+                <li>
+                    Random access to elements (like in an array) is required
+                </li>
+            </ul>
+
+            <h3 className="text-xl font-semibold">Prerequisites:</h3>
+            <ol className="list-decimal list-inside space-y-2">
+                <li>The array must be sorted in ascending or descending order</li>
+                <li>Random access to elements (like in an array) is required</li>
+                <li>The comparison operator ({'>'}, &lt;, =) must be defined for the elements</li>
+            </ol>
+
+            <h3 className="text-xl font-semibold">Algorithm Steps:</h3>
+            <ol className="list-decimal list-inside space-y-2">
+                <li>
+                    Initialize pointers:
+                    <ul className="list-disc ml-8 mt-2">
+                        <li>left (l) = start of array</li>
+                        <li>right (r) = end of array</li>
+                    </ul>
+                </li>
+                <li>While left ≤ right:
+                    <ul className="list-disc ml-8 mt-2">
+                        <li>Calculate mid = left + (right - left) / 2</li>
+                        <li>If element at mid is target, return mid</li>
+                        <li>If target &lt; mid element, set right = mid - 1</li>
+                        <li>If target {'>'} mid element, set left = mid + 1</li>
+                    </ul>
+                </li>
+                <li>If element not found, return -1</li>
+            </ol>
+
+            <h3 className="text-xl font-semibold">Implementation Details:</h3>
+            <p>
+                Key points in the implementation:
+            </p>
+            <ul className="list-disc list-inside space-y-2">
+                <li>Base case: if (left {'>'} right) return -1</li>
+                <li>Mid calculation: mid = left + (right - left) / 2
+                    <ul className="list-disc ml-8 mt-1">
+                        <li>We use this instead of (left + right) / 2 to prevent integer overflow</li>
+                    </ul>
+                </li>
+                <li>Recursive approach:
+                    <ul className="list-disc ml-8 mt-1">
+                        <li>Makes three recursive calls at most</li>
+                        <li>Each call reduces search space by half</li>
+                    </ul>
+                </li>
+                <li>Iterative approach:
+                    <ul className="list-disc ml-8 mt-1">
+                        <li>Uses while loop</li>
+                        <li>More space efficient than recursive</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3 className="text-xl font-semibold">Real-world Applications:</h3>
+            <ul className="list-disc list-inside space-y-2">
+                <li>Database Indexing</li>
+                <li>Dictionary and Phone Book Implementations</li>
+                <li>Finding IP Addresses in Routing Tables</li>
+                <li>Computer Graphics (Binary Space Partitioning)</li>
+                <li>Machine Learning (Finding Optimal Parameters)</li>
+                <li>Version Control Systems (Finding Bugs using Git Bisect)</li>
+            </ul>
         </div>
     );
 };
@@ -200,7 +173,7 @@ public:
 
 `,
         javascript:
-        `class Solution {
+            `class Solution {
     constructor() {}
 
     binarySearch(arr, l, h, target) {
