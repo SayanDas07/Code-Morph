@@ -72,12 +72,11 @@ const kadanesAlgoPage = () => {
             </div>
           </Link>
 
-          {/*<div className="flex items-center gap-3">
-                        <span className="text-sm text-white/60 bg-slate-800/50 px-3 py-1 rounded-full border border-slate-700/30">
-                            Version 2.0
-                        </span>
-
-                    </div>*/}
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-white/60 bg-slate-800/50 px-3 py-1 rounded-full border border-slate-700/30">
+              Version 2.0
+            </span>
+          </div>
         </div>
       </nav>
       {/* Header Section */}
