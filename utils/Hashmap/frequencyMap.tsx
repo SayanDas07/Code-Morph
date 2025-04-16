@@ -74,8 +74,10 @@ Space Complexity: O(n)`
                     transition={{ duration: 0.3 }}
                     className="mt-2 p-4 bg-slate-800 rounded-lg"
                 >
-                    <div className="text-slate-300 whitespace-pre-line">
-                        {content}
+                   <div className="text-slate-300 space-y-1">
+                    {content.split('\n').map((line, i) => (
+                    <p key={i}>{line}</p>
+                    ))}
                     </div>
                 </motion.div>
             )}
