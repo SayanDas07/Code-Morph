@@ -8,7 +8,7 @@ export const Theory = () => {
         <div className="space-y-6 p-6 max-w-3xl">
             <h2 className="text-2xl font-semibold">Theory: Level Order Traversal in a Binary Tree</h2>
 
-            <p className="text-gray-700">
+            <p className="text-gray-300">
                 Level order traversal, also known as breadth-first traversal, visits nodes level by level
                 from left to right. This method uses a queue to keep track of nodes and their children,
                 making it useful for tasks like finding the minimum depth of a tree or serializing it.
