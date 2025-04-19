@@ -45,7 +45,7 @@ export const Theory = () => {
                 </ul>
 
                 <h3 className="text-xl font-semibold mb-2">Example Graph Structure:</h3>
-                <svg viewBox="0 0 500 300" className="w-full h-64 bg-gray-50">
+                <svg viewBox="0 0 500 300" className="w-full h-64 bg-gray-800">
 
                     {edges.map(edge => (
                         <line
@@ -54,7 +54,7 @@ export const Theory = () => {
                             y1={nodes.find(n => n.id === edge.from)?.y ?? 0}
                             x2={nodes.find(n => n.id === edge.to)?.x ?? 0}
                             y2={nodes.find(n => n.id === edge.to)?.y ?? 0}
-                            stroke="gray"
+                            stroke="black"
                             strokeWidth="2"
                         />
                     ))}
@@ -64,8 +64,8 @@ export const Theory = () => {
                                 cx={node.x}
                                 cy={node.y}
                                 r="20"
-                                fill="white"
-                                stroke="blue"
+                                fill="yellow"
+                                stroke="red"
                                 strokeWidth="2"
                             />
                             <text
