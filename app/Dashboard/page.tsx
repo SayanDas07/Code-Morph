@@ -7,7 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Award, Calendar, Mail, Clock, Pencil, BookOpen, Flame, Trash2 } from "lucide-react";
+import { Loader2, Award, Calendar, Mail, Clock, Pencil, BookOpen, Flame, Trash2, RotateCw } from "lucide-react";
 import { Github, Linkedin, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -134,6 +134,7 @@ const Dashboard: React.FC = () => {
     linkedinLink: '',
     leetcodeLink: ''
   });
+  const [solvedTimestamps, setSolvedTimestamps] = useState<Record<string, number>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [editMode, setEditMode] = useState({
@@ -325,6 +326,19 @@ const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') =>
   }
 };
 
+
+  // Read solved timestamps from localStorage
+  useEffect(() => {
+    if (!userData?.solvedProblems) return;
+    try {
+      const timestamps: Record<string, number> = {};
+      for (const p of userData.solvedProblems) {
+        const ts = localStorage.getItem(`codemorph-solved-${p.problemId}`);
+        if (ts) timestamps[p.problemId] = parseInt(ts, 10);
+      }
+      setSolvedTimestamps(timestamps);
+    } catch { /* ignore */ }
+  }, [userData?.solvedProblems]);
 
   // Helper function to group problems by month
   const groupProblemsByMonth = (problems: SolvedProblem[]) => {
@@ -530,7 +544,11 @@ const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') =>
                         <h3 className="text-lg font-semibold text-blue-300 mb-3">{month}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {problems.map((problem) => (
-                            <div key={problem.problemId} className="bg-gray-700/20 rounded-lg p-3 hover:bg-gray-700/40 transition-colors">
+                            <Link
+                              key={problem.problemId}
+                              href={`/problems/${problem.problemId}`}
+                              className="bg-gray-700/20 rounded-lg p-3 hover:bg-gray-700/40 transition-colors cursor-pointer block"
+                            >
                               <div className="flex justify-between items-start">
                                 <p className="font-medium text-white">{problem.problemName}</p>
                                 <Badge
@@ -543,15 +561,24 @@ const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') =>
                                   {problem.difficulty}
                                 </Badge>
                               </div>
-                              <p className="text-xs text-gray-400 mt-1">
-                                {new Date(problem.solvedAt).toLocaleDateString("en-US", {
-                                  month: "short",
-                                  day: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit"
-                                })}
-                              </p>
-                            </div>
+                              <div className="flex items-center gap-3 mt-1">
+                                <p className="text-xs text-gray-400 flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  {new Date(problem.solvedAt).toLocaleDateString("en-US", {
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit"
+                                  })}
+                                </p>
+                                {solvedTimestamps[problem.problemId] && (
+                                  <p className="text-xs text-cyan-400/70 flex items-center gap-1" title={`Last solved: ${new Date(solvedTimestamps[problem.problemId]).toLocaleString()}`}>
+                                    <RotateCw className="w-3 h-3" />
+                                    {formatDashboardTimeAgo(solvedTimestamps[problem.problemId])}
+                                  </p>
+                                )}
+                              </div>
+                            </Link>
                           ))}
                         </div>
                       </div>
@@ -564,7 +591,11 @@ const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') =>
                     {userData.solvedProblems.length > 0 ? (
                       <div className="grid grid-cols-1 gap-2">
                         {userData.solvedProblems.map((problem) => (
-                          <div key={problem.problemId} className="flex items-center justify-between p-3 bg-gray-700/20 rounded-lg hover:bg-gray-700/40 transition-colors">
+                          <Link
+                            key={problem.problemId}
+                            href={`/problems/${problem.problemId}`}
+                            className="flex items-center justify-between p-3 bg-gray-700/20 rounded-lg hover:bg-gray-700/40 transition-colors cursor-pointer"
+                          >
                             <div>
                               <p className="font-medium text-white">{problem.problemName}</p>
                             </div>
@@ -581,8 +612,14 @@ const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') =>
                               <Badge variant="outline" className="bg-blue-900/30 hover:bg-blue-800/40 text-blue-300 border-blue-700">
                                 {new Date(problem.solvedAt).toLocaleDateString()}
                               </Badge>
+                              {solvedTimestamps[problem.problemId] && (
+                                <Badge variant="outline" className="bg-cyan-900/30 hover:bg-cyan-800/40 text-cyan-300 border-cyan-700" title={`Last solved: ${new Date(solvedTimestamps[problem.problemId]).toLocaleString()}`}>
+                                  <RotateCw className="w-3 h-3 mr-1" />
+                                  {formatDashboardTimeAgo(solvedTimestamps[problem.problemId])}
+                                </Badge>
+                              )}
                             </div>
-                          </div>
+                          </Link>
                         ))}
                       </div>
                     ) : (
@@ -766,5 +803,18 @@ const handleRemoveLink = async (linkType: 'github' | 'linkedin' | 'leetcode') =>
    </div>
   );
 };
+
+function formatDashboardTimeAgo(timestamp: number): string {
+  const diff = Date.now() - timestamp;
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  return `${months}mo ago`;
+}
 
 export default Dashboard;

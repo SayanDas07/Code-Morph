@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { BookOpen, ChevronRight, Tag, Loader2, CheckCircle, Circle } from 'lucide-react';
+import { BookOpen, ChevronRight, Tag, Loader2, CheckCircle, Circle, Code2, Clock } from 'lucide-react';
 import { Algorithm, Problem } from '@/utils/algorithmData';
 import { useUser } from '@clerk/nextjs';
 
@@ -13,8 +13,10 @@ interface AlgorithmCardProps {
 export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [solvedProblems, setSolvedProblems] = useState<Set<string>>(new Set());
+    const [solvedTimestamps, setSolvedTimestamps] = useState<Record<string, number>>({});
     const [isUpdating, setIsUpdating] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
     const router = useRouter();
 
     const { user } = useUser();
@@ -45,6 +47,18 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
 
         fetchSolvedProblems();
     }, [userId]);
+
+    // Read solved timestamps from localStorage
+    useEffect(() => {
+        const timestamps: Record<string, number> = {};
+        try {
+            for (const p of algorithm.problems) {
+                const ts = localStorage.getItem(`codemorph-solved-${p.id}`);
+                if (ts) timestamps[p.id] = parseInt(ts, 10);
+            }
+        } catch { /* ignore */ }
+        setSolvedTimestamps(timestamps);
+    }, [algorithm.problems]);
 
     const handleProblemSolved = async (e: React.MouseEvent, problemId: string, problemName: string, difficulty: string) => {
         e.stopPropagation(); 
@@ -164,9 +178,10 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                     <div className="px-6 py-3 bg-gray-800/70">
                         <div className="grid grid-cols-12 gap-4">
                             <div className="col-span-1 font-medium text-gray-300">Status</div>
-                            <div className="col-span-5 font-medium text-gray-300">Problem</div>
+                            <div className="col-span-4 font-medium text-gray-300">Problem</div>
                             <div className="col-span-2 font-medium text-gray-300">Difficulty</div>
-                            <div className="col-span-4 font-medium text-gray-300">Description</div>
+                            <div className="col-span-3 font-medium text-gray-300">Description</div>
+                            <div className="col-span-2 font-medium text-gray-300 text-center">Solve</div>
                         </div>
                     </div>
 
@@ -179,25 +194,30 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                             <div className="grid grid-cols-12 gap-4 items-center">
                                 
                                 <div className="col-span-1">
-                                    {isUpdating === problem.id ? (
-                                        <Loader2 className="h-5 w-5 text-blue-400 animate-spin" />
-                                    ) : (
-                                        <div
-                                            onClick={(e) => handleProblemSolved(e, problem.id, problem.name, problem.difficulty)}
-                                            className="flex items-center justify-center cursor-pointer hover:bg-gray-700/50 p-2 rounded-md"
-                                            title={solvedProblems.has(problem.id) ? "Mark as unsolved" : "Mark as solved"}
-                                        >
-                                            {solvedProblems.has(problem.id) ? (
-                                                <CheckCircle className="h-5 w-5 text-green-400" />
-                                            ) : (
-                                                <Circle className="h-5 w-5 text-gray-400" />
-                                            )}
-                                        </div>
-                                    )}
+                                    <div
+                                        className="flex flex-col items-center justify-center p-2 rounded-md gap-0.5"
+                                        title={solvedProblems.has(problem.id)
+                                            ? (solvedTimestamps[problem.id]
+                                                ? `Solved ${formatTimeAgoShort(solvedTimestamps[problem.id])}`
+                                                : "Solved")
+                                            : "Not solved yet — submit in the IDE to mark as solved"}
+                                    >
+                                        {solvedProblems.has(problem.id) ? (
+                                            <CheckCircle className="h-5 w-5 text-green-400" />
+                                        ) : (
+                                            <Circle className="h-5 w-5 text-gray-500" />
+                                        )}
+                                        {solvedProblems.has(problem.id) && solvedTimestamps[problem.id] && (
+                                            <span className="flex items-center gap-0.5 text-[9px] text-green-500/70">
+                                                <Clock className="h-2.5 w-2.5" />
+                                                {formatTimeAgoShort(solvedTimestamps[problem.id])}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
 
                          
-                                <div className="col-span-5">
+                                <div className="col-span-4">
                                     <h3 className="text-lg font-semibold text-gray-200 group-hover:text-blue-400 transition-colors">
                                         {problem.name}
                                     </h3>
@@ -213,7 +233,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                                 </div>
 
                                 
-                                <div className="col-span-4 flex items-center justify-between group/desc relative">
+                                <div className="col-span-3 flex items-center justify-between group/desc relative">
                                     <div className="overflow-hidden w-full">
                                         <p className="text-gray-400 truncate pr-6">{problem.description}</p>
 
@@ -228,6 +248,28 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
                                     <ChevronRight className="h-5 w-5 text-gray-600 group-hover:text-blue-400 
                                         group-hover:transform group-hover:translate-x-1 transition-all absolute right-0" />
                                 </div>
+
+                                <div className="col-span-2 flex justify-center">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setNavigatingTo(problem.id);
+                                            router.push(`/problems/${problem.id}`);
+                                        }}
+                                        disabled={navigatingTo === problem.id}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg 
+                                            bg-cyan-900/30 text-cyan-400 border border-cyan-800/50 
+                                            hover:bg-cyan-900/50 hover:text-cyan-300 transition-all
+                                            disabled:opacity-60 disabled:cursor-wait"
+                                    >
+                                        {navigatingTo === problem.id ? (
+                                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                        ) : (
+                                            <Code2 className="h-3.5 w-3.5" />
+                                        )}
+                                        {navigatingTo === problem.id ? 'Loading...' : 'Solve'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -235,4 +277,17 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
             )}
         </div>
     );
+}
+
+function formatTimeAgoShort(timestamp: number): string {
+    const diff = Date.now() - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1) return "now";
+    if (minutes < 60) return `${minutes}m`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days}d`;
+    const months = Math.floor(days / 30);
+    return `${months}mo`;
 }

@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useClerk, useUser } from "@clerk/nextjs";
-import { LogOut, User, Settings, Github, Linkedin, Code, BookOpen, Award } from "lucide-react";
+import { LogOut, User, Settings, Github, Linkedin, Code, BookOpen, Award, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import LoadingScreen from "@/components/LoadingScreen";
 import { SearchSection } from "@/components/homePage/SearchSection";
 import { AlgorithmList } from "@/components/homePage/AlgorithmList";
@@ -294,6 +294,7 @@ const Footer: React.FC = () => {
 
 const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -311,23 +312,64 @@ const HomePage: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-gray-950 text-gray-100 bg-[url('/assets/grid-pattern.svg')] bg-fixed">
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-max-auto bg-gray-900/80 backdrop-blur-md shadow-2xl relative z-10 border-r border-gray-800/50">
-          <div className="p-6 h-full flex flex-col">
-            <div className="mb-8 flex items-center justify-center">
-              <Link href="/" className="flex items-center gap-2">
-                <div className="relative w-10 h-10">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg blur-sm"></div>
-                  <div className="absolute inset-0 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-700">
-                    <BookOpen className="h-5 w-5 text-blue-400" />
-                  </div>
-                </div>
-                <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-                  Code Morph
-                </span>
-              </Link>
-            </div>
+        <aside
+          className={`bg-gray-900/80 backdrop-blur-md shadow-2xl relative z-10 border-r border-gray-800/50 transition-all duration-300 shrink-0 ${
+            sidebarCollapsed ? "w-14" : "w-auto"
+          }`}
+        >
+          <div className="p-2 h-full flex flex-col">
+            {/* Collapse/Expand Toggle */}
+            <button
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="self-end p-2 mb-2 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white transition"
+              title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {sidebarCollapsed ? (
+                <PanelLeftOpen className="w-5 h-5" />
+              ) : (
+                <PanelLeftClose className="w-5 h-5" />
+              )}
+            </button>
 
-            <UserProfileSection />
+            {!sidebarCollapsed && (
+              <div className="p-4 flex flex-col flex-1">
+                <div className="mb-8 flex items-center justify-center">
+                  <Link href="/" className="flex items-center gap-2">
+                    <div className="relative w-10 h-10">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg blur-sm"></div>
+                      <div className="absolute inset-0 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-700">
+                        <BookOpen className="h-5 w-5 text-blue-400" />
+                      </div>
+                    </div>
+                    <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                      Code Morph
+                    </span>
+                  </Link>
+                </div>
+
+                <UserProfileSection />
+              </div>
+            )}
+
+            {sidebarCollapsed && (
+              <div className="flex flex-col items-center gap-4 mt-2">
+                <Link href="/" title="Home">
+                  <div className="relative w-8 h-8">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md blur-sm"></div>
+                    <div className="absolute inset-0 bg-gray-900 rounded-md flex items-center justify-center border border-gray-700">
+                      <BookOpen className="h-4 w-4 text-blue-400" />
+                    </div>
+                  </div>
+                </Link>
+                <Link
+                  href="/Dashboard"
+                  className="p-2 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white transition"
+                  title="Dashboard"
+                >
+                  <User className="w-5 h-5" />
+                </Link>
+              </div>
+            )}
           </div>
         </aside>
 
